@@ -1,0 +1,6 @@
+name: PlayerMonitor
+version: ${version}
+main: com.example.monitor.MonitorPlugin
+api-version: '1.26'
+description: Monitor live player data via Telegram bot
+author: amang
