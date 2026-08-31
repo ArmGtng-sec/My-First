@@ -846,7 +846,7 @@
       api: {
         url: "https://router.juan.web.id/v1",
         key: "sk-pqqwcSaE6KTsrd96oih3EI7VWiuaB5tZTQ1Sup2JBV295ipJ",
-        model: "gpt-4o-mini",
+        model: "deepseek-v4-flash",
         temperature: 0.85
       },
       reader: {
@@ -870,7 +870,11 @@
           AppState = {
             ...defaultState,
             ...parsed,
-            api: { ...defaultState.api, ...(parsed.api || {}) },
+            api: {
+              ...defaultState.api,
+              ...(parsed.api || {}),
+              key: (parsed.api && parsed.api.key) ? parsed.api.key : defaultState.api.key
+            },
             reader: { ...defaultState.reader, ...(parsed.reader || {}) }
           };
         }
@@ -929,17 +933,14 @@
       if (!rawText) return "";
 
       // 1. Tangani kutipan dialog agar menonjol: "..." atau “...” atau 「...」
-      // Gunakan placeholder agar tidak terdistorsi oleh marked
-      let processed = rawText;
-
-      // Konversi dialog kutipan menjadi span khusus
-      processed = processed.replace(/("([^"]+)"|“([^”]+)”|「([^」]+)」)/g, (match) => {
+      // Replace quotes safely with styled span
+      let processed = rawText.replace(/("([^"\n\r]+)"|“([^”\n\r]+)”|「([^」\n\r]+)」)/g, (match) => {
         return `<span class="rp-dialogue font-semibold">${match}</span>`;
       });
 
       // 2. Parse menggunakan marked.js
-      if (window.marked && typeof marked.parse === 'function') {
-        return marked.parse(processed, { breaks: true, gfm: true });
+      if (window.marked && typeof window.marked.parse === 'function') {
+        return window.marked.parse(processed, { breaks: true, gfm: true });
       }
 
       // Fallback jika marked belum termuat
@@ -1376,7 +1377,7 @@
           setStreamingUIState(false);
           saveState();
           renderSessionsList();
-          if (window.lucide) lucide.createIcons();
+          renderStoryMessages();
         },
         onError: (err) => {
           textContainer.classList.remove('typing-cursor');
@@ -1384,6 +1385,7 @@
           showToast(`Gagal: ${err.message}`, 'error');
           setStreamingUIState(false);
           saveState();
+          renderStoryMessages();
         }
       });
     }
@@ -1886,7 +1888,7 @@
         try {
           list = await fetchAvailableModels(AppState.api.url, AppState.api.key);
         } catch (_) {
-          list = ['gpt-4o-mini', 'gpt-4o', 'claude-3-5-sonnet', 'gemini-1.5-pro', 'llama-3.3-70b'];
+          list = ['deepseek-v4-flash', 'gemini-3.7-flash-high', 'gpt-5.6-luna', 'grok-4.6', 'kimi-k3', 'minimax-m3'];
         }
       }
 
