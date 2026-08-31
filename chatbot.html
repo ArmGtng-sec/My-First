@@ -211,6 +211,16 @@
       background: var(--user-msg-bg);
       color: var(--user-msg-text);
       border-bottom-right-radius: 4px;
+    }
+    .msg-img-preview {
+      max-width: 100%;
+      max-height: 240px;
+      border-radius: var(--radius-sm);
+      margin-bottom: 8px;
+      display: block;
+      object-fit: cover;
+    }
+    .msg-text-content {
       white-space: pre-wrap;
     }
     .msg-row.assistant .msg-bubble {
@@ -334,7 +344,44 @@
       padding: 10px 16px max(12px, env(safe-area-inset-bottom));
       background: var(--surface);
       border-top: 1px solid var(--surface-border);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
     }
+    .img-staging-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 10px;
+      background: var(--bg);
+      border: 1px dashed var(--surface-border);
+      border-radius: var(--radius-sm);
+    }
+    .img-thumbnail {
+      width: 44px;
+      height: 44px;
+      border-radius: 6px;
+      object-fit: cover;
+      border: 1px solid var(--surface-border);
+    }
+    .img-staging-info {
+      flex: 1;
+      font-size: 12px;
+      color: var(--text-muted);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .img-remove-btn {
+      background: transparent;
+      border: none;
+      color: var(--danger);
+      font-size: 18px;
+      cursor: pointer;
+      padding: 4px;
+      line-height: 1;
+    }
+
     .input-box {
       display: flex;
       align-items: flex-end;
@@ -342,12 +389,26 @@
       background: var(--bg);
       border: 1px solid var(--surface-border);
       border-radius: var(--radius-lg);
-      padding: 6px 6px 6px 14px;
+      padding: 6px 6px 6px 10px;
       transition: border-color 0.15s ease;
     }
     .input-box:focus-within {
       border-color: var(--primary);
     }
+    .attach-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      margin-bottom: 2px;
+    }
+    .attach-btn:hover { color: var(--text); background: var(--surface-hover); }
     textarea {
       flex: 1;
       background: transparent;
@@ -407,13 +468,23 @@
     <div id="welcome-card" class="welcome-card">
       <span class="welcome-badge">Siap Digunakan</span>
       <h2>Mulai Percakapan</h2>
-      <p>Pilih model di atas dan ketik pesan untuk memulai interaksi langsung dengan router AI.</p>
+      <p>Pilih model di atas. Bisa kirim teks atau upload gambar langsung (klik ikon klip kertas).</p>
     </div>
   </main>
 
   <footer>
+    <div id="img-staging" class="img-staging-bar" style="display: none;">
+      <img id="staged-thumb" class="img-thumbnail" src="" alt="Preview">
+      <span id="staged-name" class="img-staging-info">gambar.png</span>
+      <button type="button" id="remove-img-btn" class="img-remove-btn" title="Hapus gambar">&times;</button>
+    </div>
+
     <form id="chat-form" class="input-box">
-      <textarea id="user-input" rows="1" placeholder="Ketik pesan..." required></textarea>
+      <input type="file" id="file-input" accept="image/*" style="display: none;">
+      <button type="button" id="attach-btn" class="attach-btn" title="Unggah Gambar" aria-label="Unggah Gambar">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+      </button>
+      <textarea id="user-input" rows="1" placeholder="Ketik pesan atau tanyakan gambar..." required></textarea>
       <button type="submit" id="submit-btn" class="send-btn" title="Kirim" aria-label="Kirim">
         <svg id="send-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 14-7-7 14-2-5-5-2Z"/></svg>
         <svg id="stop-icon" style="display:none;" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect width="16" height="16" x="4" y="4" rx="2"/></svg>
@@ -422,7 +493,6 @@
   </footer>
 
   <script>
-    // ponytail: Simple client-side app with direct token embedded for demo/testing. In production, use backend proxy.
     const CONFIG = {
       baseUrl: 'https://router.juan.web.id/v1',
       apiKey: 'sk-pqqwcSaE6KTsrd96oih3EI7VWiuaB5tZTQ1Sup2JBV295ipJ'
@@ -433,7 +503,8 @@
       models: [],
       currentModel: '',
       isGenerating: false,
-      abortController: null
+      abortController: null,
+      stagedImage: null // { base64, name }
     };
 
     const dom = {
@@ -446,7 +517,13 @@
       submitBtn: document.getElementById('submit-btn'),
       sendIcon: document.getElementById('send-icon'),
       stopIcon: document.getElementById('stop-icon'),
-      clearBtn: document.getElementById('clear-btn')
+      clearBtn: document.getElementById('clear-btn'),
+      fileInput: document.getElementById('file-input'),
+      attachBtn: document.getElementById('attach-btn'),
+      imgStaging: document.getElementById('img-staging'),
+      stagedThumb: document.getElementById('staged-thumb'),
+      stagedName: document.getElementById('staged-name'),
+      removeImgBtn: document.getElementById('remove-img-btn')
     };
 
     function escapeHtml(text) {
@@ -458,7 +535,6 @@
       const codeBlocks = [];
       let text = escapeHtml(md);
 
-      // Extract code blocks
       text = text.replace(/```([a-zA-Z0-9_-]*)\n?([\s\S]*?)```/g, (match, lang, code) => {
         const id = codeBlocks.length;
         const language = lang.trim() || 'code';
@@ -467,25 +543,15 @@
         return `%%%CODE_BLOCK_${id}%%%`;
       });
 
-      // Headers
       text = text.replace(/^### (.*$)/gim, '<h3>$1</h3>');
       text = text.replace(/^## (.*$)/gim, '<h2>$1</h2>');
       text = text.replace(/^# (.*$)/gim, '<h1>$1</h1>');
-
-      // Blockquotes
       text = text.replace(/^\> (.*$)/gim, '<blockquote>$1</blockquote>');
-
-      // Bold & Italic
       text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
       text = text.replace(/\*(.*?)\*/g, '<em>$1</em>');
-
-      // Inline code
       text = text.replace(/`([^`]+)`/g, '<code>$1</code>');
-
-      // Links
       text = text.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
 
-      // Lists
       text = text.replace(/(?:^[-*]\s+.+(?:\n|$))+/gm, block => {
         const items = block.trim().split(/\n/).map(line => `<li>${line.replace(/^[-*]\s+/, '')}</li>`).join('');
         return `<ul>${items}</ul>`;
@@ -496,7 +562,6 @@
         return `<ol>${items}</ol>`;
       });
 
-      // Paragraphs
       const paragraphs = text.split(/\n{2,}/).map(p => {
         p = p.trim();
         if (!p) return '';
@@ -504,7 +569,6 @@
         return `<p>${p.replace(/\n/g, '<br>')}</p>`;
       }).filter(Boolean).join('');
 
-      // Re-insert code blocks
       return paragraphs.replace(/%%%CODE_BLOCK_(\d+)%%%/g, (match, idx) => {
         const block = codeBlocks[idx];
         return `
@@ -551,9 +615,11 @@
         if (!models.length) throw new Error('Tidak ada model.');
 
         state.models = models;
-        state.currentModel = models[0];
+        // Prefer vision model if available by default
+        const visionModel = models.find(m => m.includes('vision')) || models[0];
+        state.currentModel = visionModel;
 
-        dom.modelSelect.innerHTML = models.map(id => `<option value="${id}">${id}</option>`).join('');
+        dom.modelSelect.innerHTML = models.map(id => `<option value="${id}" ${id === visionModel ? 'selected' : ''}>${id}</option>`).join('');
         setStatus(`${models.length} model aktif`);
       } catch (err) {
         dom.modelSelect.innerHTML = '<option value="">Gagal memuat model</option>';
@@ -561,18 +627,34 @@
       }
     }
 
-    function appendUserMessage(text) {
+    function appendUserMessage(text, imageBase64 = null) {
       dom.welcomeCard.style.display = 'none';
-      state.messages.push({ role: 'user', content: text });
+
+      // Construct message format for state
+      if (imageBase64) {
+        state.messages.push({
+          role: 'user',
+          content: [
+            { type: 'text', text: text || 'Tolong deskripsikan gambar ini.' },
+            { type: 'image_url', image_url: { url: imageBase64 } }
+          ]
+        });
+      } else {
+        state.messages.push({ role: 'user', content: text });
+      }
 
       const row = document.createElement('div');
       row.className = 'msg-row user';
-      row.innerHTML = `
-        <div class="msg-bubble">${escapeHtml(text)}</div>
-        <div class="msg-actions">
-          <span class="msg-meta">Kamu</span>
-        </div>
-      `;
+      let html = '<div class="msg-bubble">';
+      if (imageBase64) {
+        html += `<img src="${imageBase64}" class="msg-img-preview" alt="Upload">`;
+      }
+      if (text) {
+        html += `<div class="msg-text-content">${escapeHtml(text)}</div>`;
+      }
+      html += `</div><div class="msg-actions"><span class="msg-meta">Kamu</span></div>`;
+
+      row.innerHTML = html;
       dom.chatContainer.appendChild(row);
       scrollToBottom();
     }
@@ -670,9 +752,7 @@
                 assistantMsg.bubble.innerHTML = renderMarkdown(fullText) + '<span class="cursor-blink"></span>';
                 scrollToBottom();
               }
-            } catch (e) {
-              // Non-fatal parse issue on chunk boundary
-            }
+            } catch (e) {}
           }
         };
 
@@ -713,6 +793,36 @@
       }
     }
 
+    // Image upload handling
+    dom.attachBtn.addEventListener('click', () => {
+      dom.fileInput.click();
+    });
+
+    dom.fileInput.addEventListener('change', (e) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        state.stagedImage = {
+          base64: reader.result,
+          name: file.name
+        };
+        dom.stagedThumb.src = reader.result;
+        dom.stagedName.textContent = file.name;
+        dom.imgStaging.style.display = 'flex';
+        dom.userInput.placeholder = 'Ajukan pertanyaan tentang gambar ini...';
+      };
+      reader.readAsDataURL(file);
+      dom.fileInput.value = '';
+    });
+
+    dom.removeImgBtn.addEventListener('click', () => {
+      state.stagedImage = null;
+      dom.imgStaging.style.display = 'none';
+      dom.userInput.placeholder = 'Ketik pesan atau tanyakan gambar...';
+    });
+
     // Event Handlers
     dom.chatForm.addEventListener('submit', (e) => {
       e.preventDefault();
@@ -721,11 +831,21 @@
         return;
       }
       const text = dom.userInput.value.trim();
-      if (!text || !state.currentModel) return;
+      const image = state.stagedImage ? state.stagedImage.base64 : null;
+
+      if (!text && !image) return;
+      if (!state.currentModel) return;
 
       dom.userInput.value = '';
       dom.userInput.style.height = 'auto';
-      appendUserMessage(text);
+
+      if (state.stagedImage) {
+        state.stagedImage = null;
+        dom.imgStaging.style.display = 'none';
+        dom.userInput.placeholder = 'Ketik pesan atau tanyakan gambar...';
+      }
+
+      appendUserMessage(text, image);
       streamChatResponse();
     });
 
@@ -748,6 +868,8 @@
 
     dom.clearBtn.addEventListener('click', () => {
       state.messages = [];
+      state.stagedImage = null;
+      dom.imgStaging.style.display = 'none';
       dom.chatContainer.innerHTML = '';
       dom.chatContainer.appendChild(dom.welcomeCard);
       dom.welcomeCard.style.display = 'flex';
