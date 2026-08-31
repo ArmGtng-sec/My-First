@@ -112,6 +112,20 @@
       if (!response.ok) throw new Error((await response.text()).slice(0, 180) || response.statusText);
       return response.json();
     }
+    async function streamChat(messages) {
+      const response = await fetch(BASE_URL + '/chat/completions', { method: 'POST', headers: { Authorization: 'Bearer ' + API_KEY, 'Content-Type': 'application/json', Accept: 'text/event-stream' }, body: JSON.stringify({ model: state.model, messages, temperature: 0.7, stream: true }) });
+      if (!response.ok) throw new Error((await response.text()).slice(0, 180) || response.statusText);
+      if (!response.body) throw new Error('Browser tidak mendukung response stream');
+      const reader = response.body.getReader(); const decoder = new TextDecoder(); let buffer = ''; let answer = '';
+      const consume = line => {
+        if (!line.startsWith('data:')) return;
+        const data = line.slice(5).trim(); if (!data || data === '[DONE]') return;
+        const chunk = JSON.parse(data); const delta = chunk.choices?.[0]?.delta?.content;
+        if (typeof delta === 'string') answer += delta;
+      };
+      while (true) { const { value, done } = await reader.read(); buffer += decoder.decode(value || new Uint8Array(), { stream: !done }); const lines = buffer.split(/\\r?\\n/); buffer = lines.pop() || ''; lines.forEach(consume); if (done) break; }
+      if (buffer) consume(buffer); return answer;
+    }
     async function loadModels() {
       try {
         const payload = await api('/models');
@@ -126,8 +140,7 @@
       if (!content || !state.model || $('send').disabled) return;
       input.value = ''; input.style.height = 'auto'; addMessage('user', content); $('send').disabled = true; typing(true); setStatus('Menunggu jawaban...');
       try {
-        const payload = await api('/chat/completions', { method: 'POST', body: JSON.stringify({ model: state.model, messages: state.messages, temperature: 0.7 }) });
-        const answer = payload.choices?.[0]?.message?.content;
+        const answer = await streamChat(state.messages);
         if (!answer) throw new Error('Respons router kosong'); addMessage('assistant', answer); setStatus(state.messages.length / 2 + ' balasan');
       } catch (error) { addMessage('assistant', 'Tidak bisa mendapat jawaban.\n\n' + error.message); setStatus('Permintaan gagal', true); }
       finally { typing(false); $('send').disabled = false; input.focus(); }
