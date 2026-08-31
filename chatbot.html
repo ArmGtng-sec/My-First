@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f4f1eb">
+  <title>Ruang Chat</title>
+  <style>
+    :root {
+      --paper: #f4f1eb;
+      --surface: #fbfaf7;
+      --ink: #20211f;
+      --muted: #777873;
+      --line: #dedbd3;
+      --accent: #c94f35;
+      --accent-soft: #f4ddd6;
+      --user: #20211f;
+      --danger: #a72d23;
+      --radius: 18px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      background: var(--paper);
+      color: var(--ink);
+      font: 15px/1.5 Arial, Helvetica, sans-serif;
+    }
+    button, select, textarea { font: inherit; }
+    button { cursor: pointer; }
+    .app { min-height: 100svh; display: flex; flex-direction: column; max-width: 760px; margin: auto; }
+    header {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      padding: calc(14px + env(safe-area-inset-top)) 18px 14px;
+      border-bottom: 1px solid var(--line); background: rgba(244,241,235,.94);
+      position: sticky; top: 0; z-index: 2;
+    }
+    .brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
+    .mark { width: 34px; height: 34px; border-radius: 11px; display: grid; place-items: center; background: var(--accent); color: white; font-weight: 700; }
+    h1 { font-size: 17px; line-height: 1.1; margin: 0; letter-spacing: 0; }
+    .status { color: var(--muted); font-size: 11px; margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 220px; }
+    .clear { border: 1px solid var(--line); background: transparent; color: var(--muted); border-radius: 10px; min-width: 44px; height: 40px; font-size: 18px; }
+    .clear:hover, .clear:focus-visible { color: var(--ink); border-color: var(--ink); outline: none; }
+    main { flex: 1; display: flex; flex-direction: column; padding: 22px 14px 16px; }
+    #messages { flex: 1; display: flex; flex-direction: column; gap: 15px; padding-bottom: 18px; }
+    .welcome { margin: auto 10px; max-width: 460px; }
+    .welcome .eyebrow { color: var(--accent); text-transform: uppercase; letter-spacing: .12em; font-size: 11px; font-weight: 700; }
+    .welcome h2 { font: 400 31px/1.08 Georgia, 'Times New Roman', serif; margin: 8px 0 10px; }
+    .welcome p { margin: 0; color: var(--muted); }
+    .message { display: flex; flex-direction: column; max-width: 88%; gap: 4px; }
+    .message.user { align-self: flex-end; align-items: flex-end; }
+    .message.assistant { align-self: flex-start; }
+    .bubble { padding: 12px 14px; border-radius: var(--radius); white-space: pre-wrap; overflow-wrap: anywhere; }
+    .user .bubble { background: var(--user); color: #fff; border-bottom-right-radius: 5px; }
+    .assistant .bubble { background: var(--surface); border: 1px solid var(--line); border-bottom-left-radius: 5px; }
+    .meta { color: var(--muted); font-size: 10px; padding: 0 5px; }
+    .composer { background: var(--surface); border: 1px solid var(--line); border-radius: 20px; padding: 10px; box-shadow: 0 8px 30px rgba(47,42,33,.06); }
+    .toolbar { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+    label { color: var(--muted); font-size: 11px; }
+    select { min-width: 0; flex: 1; border: 0; background: transparent; color: var(--ink); font-size: 12px; font-weight: 700; outline: none; }
+    .model-state { font-size: 11px; color: var(--muted); }
+    .model-state.error { color: var(--danger); }
+    .input-row { display: flex; align-items: flex-end; gap: 8px; }
+    textarea { width: 100%; resize: none; min-height: 44px; max-height: 140px; border: 0; outline: 0; background: transparent; color: var(--ink); padding: 10px 7px 7px; }
+    textarea::placeholder { color: #9b9b95; }
+    .send { width: 44px; height: 44px; flex: 0 0 44px; border: 0; border-radius: 14px; background: var(--accent); color: #fff; font-size: 20px; line-height: 1; }
+    .send:disabled { opacity: .45; cursor: wait; }
+    .hint { text-align: center; color: var(--muted); font-size: 10px; margin: 9px 0 0; }
+    .typing { display: inline-flex; gap: 4px; align-items: center; padding: 15px 16px; }
+    .typing i { width: 5px; height: 5px; border-radius: 50%; background: var(--muted); animation: pulse 1s infinite alternate; }
+    .typing i:nth-child(2) { animation-delay: .2s; }.typing i:nth-child(3) { animation-delay: .4s; }
+    @keyframes pulse { to { opacity: .25; transform: translateY(-2px); } }
+    @media (min-width: 700px) { main { padding: 34px 24px 24px; } header { padding-left: 24px; padding-right: 24px; } }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; } }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div class="brand"><div class="mark" aria-hidden="true">R</div><div><h1>Ruang Chat</h1><div id="status" class="status">Menghubungkan ke router...</div></div></div>
+      <button class="clear" id="clear" type="button" aria-label="Hapus percakapan" title="Hapus percakapan">⌫</button>
+    </header>
+    <main>
+      <section id="messages" aria-live="polite">
+        <div class="welcome" id="welcome"><div class="eyebrow">Percakapan baru</div><h2>Tulis apa yang ingin kamu pikirkan.</h2><p>Pilih model di bawah, lalu mulai dari pesan pertama.</p></div>
+      </section>
+      <form class="composer" id="composer">
+        <div class="toolbar"><label for="model">MODEL</label><select id="model" aria-label="Pilih model"><option>Memuat model...</option></select><span id="modelState" class="model-state">...</span></div>
+        <div class="input-row"><textarea id="prompt" rows="1" placeholder="Ketik pesan..." aria-label="Pesan" required></textarea><button class="send" id="send" type="submit" aria-label="Kirim pesan" title="Kirim pesan">↑</button></div>
+        <div class="hint">Enter untuk kirim · Shift + Enter untuk baris baru</div>
+      </form>
+    </main>
+  </div>
+  <script>
+    const BASE_URL = 'https://router.juan.web.id/v1';
+    const API_KEY = 'sk-pqqwcSaE6KTsrd96oih3EI7VWiuaB5tZTQ1Sup2JBV295ipJ';
+    const state = { messages: [], model: '' };
+    const $ = id => document.getElementById(id);
+
+    function setStatus(text, error = false) { $('status').textContent = text; $('modelState').textContent = error ? 'gagal' : (state.model ? 'siap' : '...'); $('modelState').className = 'model-state' + (error ? ' error' : ''); }
+    function addMessage(role, content) {
+      state.messages.push({ role, content });
+      $('welcome').hidden = true;
+      const wrap = document.createElement('div'); wrap.className = 'message ' + role;
+      const bubble = document.createElement('div'); bubble.className = 'bubble'; bubble.textContent = content;
+      const meta = document.createElement('div'); meta.className = 'meta'; meta.textContent = role === 'user' ? 'Kamu' : 'Asisten';
+      wrap.append(bubble, meta); $('messages').append(wrap); wrap.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    }
+    function typing(show) { const old = $('typing'); if (old) old.remove(); if (show) { const el = document.createElement('div'); el.id = 'typing'; el.className = 'message assistant'; el.innerHTML = '<div class="bubble typing"><i></i><i></i><i></i></div>'; $('messages').append(el); el.scrollIntoView({ block: 'nearest' }); } }
+    async function api(path, options = {}) {
+      const response = await fetch(BASE_URL + path, { ...options, headers: { Authorization: 'Bearer ' + API_KEY, 'Content-Type': 'application/json', ...(options.headers || {}) } });
+      if (!response.ok) throw new Error((await response.text()).slice(0, 180) || response.statusText);
+      return response.json();
+    }
+    async function loadModels() {
+      try {
+        const payload = await api('/models');
+        const models = (payload.data || []).map(item => item.id).filter(Boolean);
+        if (!models.length) throw new Error('Router tidak mengirim model');
+        state.model = models[0]; $('model').replaceChildren(...models.map(id => { const option = new Option(id, id); return option; }));
+        setStatus(models.length + ' model tersedia');
+      } catch (error) { $('model').innerHTML = '<option value="">Model tidak tersedia</option>'; setStatus('Gagal memuat model', true); $('modelState').title = error.message; }
+    }
+    async function sendMessage(event) {
+      event.preventDefault(); const input = $('prompt'); const content = input.value.trim();
+      if (!content || !state.model || $('send').disabled) return;
+      input.value = ''; input.style.height = 'auto'; addMessage('user', content); $('send').disabled = true; typing(true); setStatus('Menunggu jawaban...');
+      try {
+        const payload = await api('/chat/completions', { method: 'POST', body: JSON.stringify({ model: state.model, messages: state.messages, temperature: 0.7 }) });
+        const answer = payload.choices?.[0]?.message?.content;
+        if (!answer) throw new Error('Respons router kosong'); addMessage('assistant', answer); setStatus(state.messages.length / 2 + ' balasan');
+      } catch (error) { addMessage('assistant', 'Tidak bisa mendapat jawaban.\n\n' + error.message); setStatus('Permintaan gagal', true); }
+      finally { typing(false); $('send').disabled = false; input.focus(); }
+    }
+    $('composer').addEventListener('submit', sendMessage);
+    $('model').addEventListener('change', event => { state.model = event.target.value; setStatus(state.model ? 'Model siap' : 'Pilih model'); });
+    $('prompt').addEventListener('input', event => { event.target.style.height = 'auto'; event.target.style.height = Math.min(event.target.scrollHeight, 140) + 'px'; });
+    $('prompt').addEventListener('keydown', event => { if (event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); $('composer').requestSubmit(); } });
+    $('clear').addEventListener('click', () => { state.messages = []; $('messages').innerHTML = ''; $('messages').append(Object.assign(document.createElement('div'), { id: 'welcome', className: 'welcome', innerHTML: '<div class="eyebrow">Percakapan baru</div><h2>Tulis apa yang ingin kamu pikirkan.</h2><p>Pilih model di bawah, lalu mulai dari pesan pertama.</p>' })); setStatus(state.model ? 'Percakapan dibersihkan' : 'Menghubungkan ke router...'); });
+    loadModels();
+  </script>
+</body>
+</html>
