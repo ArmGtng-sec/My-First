@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Juan AI Router Speed & Connection Benchmark</title>
+  <title>Juan Router - Fast Health Check & Model Ping</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Lucide Icons CDN -->
@@ -15,11 +15,13 @@
         extend: {
           colors: {
             brand: {
+              blue: '#3b82f6',
               cyan: '#06b6d4',
               emerald: '#10b981',
             }
           },
           fontFamily: {
+            sans: ['Plus Jakarta Sans', 'Inter', 'system-ui', 'sans-serif'],
             mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
           }
         }
@@ -27,7 +29,7 @@
     }
   </script>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
     }
@@ -36,84 +38,85 @@
       height: 6px;
     }
     .custom-scrollbar::-webkit-scrollbar-track {
-      background: #0f172a;
+      background: #090d16;
     }
     .custom-scrollbar::-webkit-scrollbar-thumb {
-      background: #334155;
+      background: #1e293b;
       border-radius: 9999px;
     }
     .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-      background: #475569;
+      background: #334155;
     }
   </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased custom-scrollbar selection:bg-cyan-500/20 selection:text-cyan-300">
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased custom-scrollbar selection:bg-blue-500/20 selection:text-blue-300">
 
   <!-- Toast Notification Container -->
-  <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2 pointer-events-none max-w-sm w-full"></div>
+  <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2.5 pointer-events-none max-w-sm w-full"></div>
 
   <!-- Header -->
-  <header class="border-b border-slate-800/80 bg-slate-900/60 backdrop-blur-md sticky top-0 z-40">
+  <header class="border-b border-slate-800/80 bg-slate-900/70 backdrop-blur-lg sticky top-0 z-40">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
       <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-emerald-500 p-0.5 flex items-center justify-center shadow-lg shadow-cyan-500/10">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 via-cyan-500 to-emerald-400 p-0.5 flex items-center justify-center shadow-lg shadow-blue-500/10">
           <div class="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center">
-            <i data-lucide="zap" class="w-5 h-5 text-cyan-400"></i>
+            <i data-lucide="radio" class="w-4 h-4 text-cyan-400"></i>
           </div>
         </div>
         <div>
-          <h1 class="text-base sm:text-lg font-bold tracking-tight bg-gradient-to-r from-cyan-300 via-slate-100 to-emerald-300 bg-clip-text text-transparent">
-            Juan AI Router Benchmark
-          </h1>
-          <p class="text-xs text-slate-400 hidden sm:block">Speed & Connection Performance Tester</p>
+          <div class="flex items-center gap-2">
+            <h1 class="text-base sm:text-lg font-bold tracking-tight bg-gradient-to-r from-blue-400 via-cyan-300 to-emerald-400 bg-clip-text text-transparent">
+              Juan Router Ping
+            </h1>
+            <span class="px-2 py-0.5 text-[10px] font-mono font-semibold uppercase tracking-wider bg-blue-500/10 text-blue-400 border border-blue-500/20 rounded-md">Fast v1</span>
+          </div>
+          <p class="text-[11px] text-slate-400 hidden sm:block">Ultra-Fast Health Check & Concurrent Model Ping Tester</p>
         </div>
       </div>
 
-      <div class="flex items-center gap-2">
-        <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-900 border border-slate-800 text-xs text-slate-300 font-mono">
-          <span id="global-status-dot" class="w-2 h-2 rounded-full bg-slate-500 animate-pulse"></span>
-          <span id="global-status-text" class="truncate max-w-[150px] sm:max-w-none">router.juan.web.id/v1</span>
+      <div class="flex items-center gap-3 font-mono text-xs">
+        <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900/90 border border-slate-800">
+          <span id="live-indicator-dot" class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span id="live-indicator-text" class="text-slate-300 font-medium truncate max-w-[130px] sm:max-w-none">router.juan.web.id</span>
         </div>
       </div>
     </div>
   </header>
 
-  <!-- Main Content -->
-  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 flex flex-col gap-6">
+  <!-- Main Container -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col gap-5">
 
-    <!-- Config & Action Card -->
-    <section class="bg-slate-900/70 border border-slate-800/90 rounded-2xl p-5 sm:p-6 shadow-xl backdrop-blur-sm relative overflow-hidden">
-      <div class="absolute -top-24 -right-24 w-60 h-60 bg-cyan-500/5 rounded-full blur-3xl pointer-events-none"></div>
-      <div class="absolute -bottom-24 -left-24 w-60 h-60 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none"></div>
+    <!-- Control & Input Bar -->
+    <section class="bg-slate-900/80 border border-slate-800/90 rounded-2xl p-5 shadow-xl backdrop-blur-md relative overflow-hidden">
+      <div class="absolute -top-20 -right-20 w-52 h-52 bg-blue-500/5 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -bottom-20 -left-20 w-52 h-52 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none"></div>
 
-      <div class="flex flex-col gap-5 relative z-10">
-        <!-- API Key Input Section -->
+      <div class="flex flex-col gap-4 relative z-10">
+        <!-- API Key Row -->
         <div>
           <div class="flex items-center justify-between mb-2">
-            <label for="api-key-input" class="text-xs font-semibold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
-              <i data-lucide="key" class="w-3.5 h-3.5 text-cyan-400"></i>
+            <label for="api-key-input" class="text-xs font-semibold uppercase tracking-wider text-slate-300 flex items-center gap-1.5 font-mono">
+              <i data-lucide="key-round" class="w-3.5 h-3.5 text-blue-400"></i>
               API Key Authorization
             </label>
-            <div class="flex items-center gap-2">
-              <label class="inline-flex items-center gap-2 text-xs text-slate-400 cursor-pointer hover:text-slate-200 transition-colors">
-                <input type="checkbox" id="save-key-checkbox" class="rounded bg-slate-800 border-slate-700 text-cyan-500 focus:ring-0 focus:ring-offset-0 w-3.5 h-3.5">
-                <span>Simpan di Browser</span>
-              </label>
-            </div>
+            <label class="inline-flex items-center gap-2 text-xs text-slate-400 cursor-pointer hover:text-slate-200 transition-colors">
+              <input type="checkbox" id="remember-key-checkbox" class="rounded bg-slate-800 border-slate-700 text-blue-500 focus:ring-0 focus:ring-offset-0 w-3.5 h-3.5 cursor-pointer">
+              <span>Remember Key</span>
+            </label>
           </div>
 
           <div class="relative flex items-center">
             <input 
               type="password" 
               id="api-key-input" 
-              placeholder="Masukkan API Key (contoh: sk-juan-xxxxxxxxxxxx)" 
-              class="w-full bg-slate-950/80 border border-slate-800 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 outline-none transition-all pr-24 font-mono"
+              placeholder="Masukkan API Key (sk-...)" 
+              class="w-full bg-slate-950/90 border border-slate-800 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-xl px-4 py-2.5 text-sm text-slate-100 placeholder-slate-500 outline-none transition-all pr-24 font-mono shadow-inner"
             />
             <div class="absolute right-2 flex items-center gap-1">
               <button 
                 type="button" 
                 id="toggle-key-visibility-btn" 
-                title="Lihat / Sembunyikan API Key"
+                title="Show / Hide API Key"
                 class="p-1.5 text-slate-400 hover:text-slate-200 hover:bg-slate-800/80 rounded-lg transition-colors"
               >
                 <i data-lucide="eye" id="toggle-key-icon" class="w-4 h-4"></i>
@@ -121,178 +124,168 @@
               <button 
                 type="button" 
                 id="clear-key-btn" 
-                title="Hapus API Key"
+                title="Hapus Input"
                 class="p-1.5 text-slate-400 hover:text-rose-400 hover:bg-slate-800/80 rounded-lg transition-colors"
               >
-                <i data-lucide="x" class="w-4 h-4"></i>
+                <i data-lucide="trash-2" class="w-4 h-4"></i>
               </button>
             </div>
           </div>
         </div>
 
-        <!-- Controls & Filters -->
-        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pt-2 border-t border-slate-800/60">
-          <div class="flex flex-wrap items-center gap-3">
+        <!-- Action Buttons & Filtering -->
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3.5 pt-3 border-t border-slate-800/60">
+          <div class="flex flex-wrap items-center gap-2.5">
             <button 
               type="button" 
-              id="start-benchmark-btn"
-              class="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-medium text-sm text-slate-950 bg-gradient-to-r from-cyan-400 to-emerald-400 hover:from-cyan-300 hover:to-emerald-300 active:scale-[0.98] transition-all shadow-lg shadow-cyan-500/10 disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none"
+              id="start-ping-btn"
+              class="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-xs uppercase tracking-wider text-slate-950 bg-gradient-to-r from-blue-400 via-cyan-400 to-emerald-400 hover:from-blue-300 hover:to-emerald-300 active:scale-[0.98] transition-all shadow-lg shadow-blue-500/10 disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none"
             >
-              <i data-lucide="play" class="w-4 h-4 fill-slate-950"></i>
-              <span>Start Benchmark</span>
+              <i data-lucide="play" class="w-3.5 h-3.5 fill-slate-950"></i>
+              <span>Ping All</span>
             </button>
 
             <button 
               type="button" 
-              id="stop-benchmark-btn"
+              id="stop-ping-btn"
               disabled
-              class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-medium text-sm text-rose-300 bg-rose-500/10 border border-rose-500/20 hover:bg-rose-500/20 active:scale-[0.98] transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:pointer-events-none"
+              class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-xs uppercase tracking-wider text-rose-300 bg-rose-500/10 border border-rose-500/20 hover:bg-rose-500/20 active:scale-[0.98] transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:pointer-events-none"
             >
-              <i data-lucide="square" class="w-4 h-4 fill-rose-300"></i>
-              <span>Stop / Cancel</span>
+              <i data-lucide="square" class="w-3.5 h-3.5 fill-rose-300"></i>
+              <span>Stop</span>
             </button>
 
             <button 
               type="button" 
-              id="reset-results-btn"
-              class="inline-flex items-center justify-center gap-2 px-3.5 py-2.5 rounded-xl text-sm text-slate-400 bg-slate-800/60 border border-slate-700/50 hover:bg-slate-800 hover:text-slate-200 active:scale-[0.98] transition-all"
+              id="reset-btn"
+              class="inline-flex items-center justify-center gap-2 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-400 bg-slate-800/50 border border-slate-700/50 hover:bg-slate-800 hover:text-slate-200 active:scale-[0.98] transition-all"
             >
-              <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+              <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
               <span class="hidden sm:inline">Reset</span>
             </button>
           </div>
 
-          <!-- Search & Filter -->
+          <!-- Search & Filter Controls -->
           <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 w-full lg:w-auto">
-            <div class="relative flex-1 sm:w-64">
-              <i data-lucide="search" class="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2"></i>
+            <div class="relative flex-1 sm:w-60">
+              <i data-lucide="search" class="w-3.5 h-3.5 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2"></i>
               <input 
                 type="text" 
-                id="search-model-input" 
-                placeholder="Cari nama model..." 
-                class="w-full bg-slate-950/80 border border-slate-800 focus:border-slate-700 rounded-xl pl-9 pr-3 py-2 text-xs text-slate-100 placeholder-slate-500 outline-none transition-all"
+                id="search-input" 
+                placeholder="Cari model id..." 
+                class="w-full bg-slate-950/80 border border-slate-800 focus:border-slate-700 rounded-xl pl-8 pr-3 py-1.5 text-xs text-slate-200 placeholder-slate-500 outline-none font-mono"
               />
             </div>
             
-            <div class="flex items-center gap-1 bg-slate-950/80 border border-slate-800 p-1 rounded-xl text-xs font-medium">
-              <button type="button" class="filter-tab-btn active px-3 py-1 rounded-lg bg-slate-800 text-slate-100 transition-colors" data-filter="all">Semua</button>
-              <button type="button" class="filter-tab-btn px-3 py-1 rounded-lg text-slate-400 hover:text-slate-200 transition-colors" data-filter="online">Online</button>
-              <button type="button" class="filter-tab-btn px-3 py-1 rounded-lg text-slate-400 hover:text-slate-200 transition-colors" data-filter="error">Error</button>
+            <div class="flex items-center gap-1 bg-slate-950/90 border border-slate-800 p-1 rounded-xl text-xs font-medium">
+              <button type="button" class="filter-tab active px-3 py-1 rounded-lg bg-slate-800 text-slate-100 transition-colors" data-filter="all">All</button>
+              <button type="button" class="filter-tab px-3 py-1 rounded-lg text-slate-400 hover:text-slate-200 transition-colors" data-filter="online">Online Only</button>
+              <button type="button" class="filter-tab px-3 py-1 rounded-lg text-slate-400 hover:text-slate-200 transition-colors" data-filter="error">Failed Only</button>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Metrics Bar / Summary Stats -->
-    <section class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+    <!-- Status Cards Grid -->
+    <section class="grid grid-cols-2 lg:grid-cols-4 gap-3.5">
       <!-- Total Models -->
-      <div class="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-4 flex flex-col justify-between">
+      <div class="bg-slate-900/70 border border-slate-800/80 rounded-2xl p-4 flex flex-col justify-between">
         <div class="flex items-center justify-between text-slate-400">
-          <span class="text-xs font-medium">Total Model</span>
-          <div class="w-8 h-8 rounded-lg bg-slate-800/80 flex items-center justify-center text-slate-300">
-            <i data-lucide="layers" class="w-4 h-4"></i>
+          <span class="text-xs font-medium">Total Models</span>
+          <div class="w-7 h-7 rounded-lg bg-slate-800/80 flex items-center justify-center text-slate-300">
+            <i data-lucide="layers" class="w-3.5 h-3.5"></i>
           </div>
         </div>
-        <div class="mt-3">
+        <div class="mt-2">
           <span id="stat-total" class="text-2xl sm:text-3xl font-bold text-slate-100 font-mono">0</span>
-          <span class="text-xs text-slate-500 ml-1">terdeteksi</span>
+          <span class="text-[11px] text-slate-500 ml-1 font-mono">models</span>
         </div>
       </div>
 
-      <!-- Online -->
-      <div class="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-4 flex flex-col justify-between relative overflow-hidden">
-        <div class="absolute -right-8 -bottom-8 w-20 h-20 bg-emerald-500/10 rounded-full blur-xl pointer-events-none"></div>
+      <!-- Active / Online -->
+      <div class="bg-slate-900/70 border border-slate-800/80 rounded-2xl p-4 flex flex-col justify-between relative overflow-hidden">
+        <div class="absolute -right-6 -bottom-6 w-16 h-16 bg-emerald-500/10 rounded-full blur-xl pointer-events-none"></div>
         <div class="flex items-center justify-between text-slate-400">
-          <span class="text-xs font-medium">Online (HTTP 200)</span>
-          <div class="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
-            <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+          <span class="text-xs font-medium">Active (HTTP 200)</span>
+          <div class="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+            <i data-lucide="check-circle" class="w-3.5 h-3.5"></i>
           </div>
         </div>
-        <div class="mt-3">
+        <div class="mt-2">
           <span id="stat-online" class="text-2xl sm:text-3xl font-bold text-emerald-400 font-mono">0</span>
-          <span id="stat-online-pct" class="text-xs text-slate-500 ml-1">(0%)</span>
+          <span id="stat-online-rate" class="text-[11px] text-slate-500 ml-1 font-mono">(0%)</span>
         </div>
       </div>
 
-      <!-- Error / Offline -->
-      <div class="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-4 flex flex-col justify-between relative overflow-hidden">
-        <div class="absolute -right-8 -bottom-8 w-20 h-20 bg-rose-500/10 rounded-full blur-xl pointer-events-none"></div>
+      <!-- Inactive / Error -->
+      <div class="bg-slate-900/70 border border-slate-800/80 rounded-2xl p-4 flex flex-col justify-between relative overflow-hidden">
+        <div class="absolute -right-6 -bottom-6 w-16 h-16 bg-rose-500/10 rounded-full blur-xl pointer-events-none"></div>
         <div class="flex items-center justify-between text-slate-400">
-          <span class="text-xs font-medium">Error / Offline</span>
-          <div class="w-8 h-8 rounded-lg bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-400">
-            <i data-lucide="alert-circle" class="w-4 h-4"></i>
+          <span class="text-xs font-medium">Inactive / Error</span>
+          <div class="w-7 h-7 rounded-lg bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-400">
+            <i data-lucide="alert-octagon" class="w-3.5 h-3.5"></i>
           </div>
         </div>
-        <div class="mt-3">
+        <div class="mt-2">
           <span id="stat-error" class="text-2xl sm:text-3xl font-bold text-rose-400 font-mono">0</span>
-          <span class="text-xs text-slate-500 ml-1">gagal</span>
+          <span class="text-[11px] text-slate-500 ml-1 font-mono">failed</span>
         </div>
       </div>
 
-      <!-- Avg / Max TPS -->
-      <div class="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-4 flex flex-col justify-between relative overflow-hidden">
-        <div class="absolute -right-8 -bottom-8 w-20 h-20 bg-cyan-500/10 rounded-full blur-xl pointer-events-none"></div>
+      <!-- Avg Latency -->
+      <div class="bg-slate-900/70 border border-slate-800/80 rounded-2xl p-4 flex flex-col justify-between relative overflow-hidden">
+        <div class="absolute -right-6 -bottom-6 w-16 h-16 bg-blue-500/10 rounded-full blur-xl pointer-events-none"></div>
         <div class="flex items-center justify-between text-slate-400">
-          <span class="text-xs font-medium">Avg Latency & Max TPS</span>
-          <div class="w-8 h-8 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400">
-            <i data-lucide="gauge" class="w-4 h-4"></i>
+          <span class="text-xs font-medium">Avg Latency</span>
+          <div class="w-7 h-7 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400">
+            <i data-lucide="zap" class="w-3.5 h-3.5"></i>
           </div>
         </div>
-        <div class="mt-3 flex items-baseline justify-between">
-          <div>
-            <span id="stat-avg-latency" class="text-xl sm:text-2xl font-bold text-cyan-400 font-mono">0</span>
-            <span class="text-xs text-slate-500 ml-0.5">ms</span>
-          </div>
-          <div class="text-right">
-            <span id="stat-max-tps" class="text-lg sm:text-xl font-bold text-emerald-400 font-mono">0</span>
-            <span class="text-xs text-slate-500 ml-0.5">t/s</span>
-          </div>
+        <div class="mt-2">
+          <span id="stat-avg-latency" class="text-2xl sm:text-3xl font-bold text-blue-400 font-mono">0</span>
+          <span class="text-[11px] text-slate-500 ml-1 font-mono">ms</span>
         </div>
       </div>
     </section>
 
-    <!-- Benchmark Results Section -->
-    <section class="bg-slate-900/70 border border-slate-800/90 rounded-2xl overflow-hidden shadow-xl flex flex-col">
-      <div class="px-5 py-4 border-b border-slate-800 flex items-center justify-between">
+    <!-- Results Table Card -->
+    <section class="bg-slate-900/80 border border-slate-800/90 rounded-2xl overflow-hidden shadow-xl flex flex-col">
+      <div class="px-5 py-3.5 border-b border-slate-800 flex items-center justify-between bg-slate-950/40">
         <div class="flex items-center gap-2">
-          <i data-lucide="activity" class="w-4 h-4 text-cyan-400"></i>
-          <h2 class="text-sm font-semibold text-slate-200">Hasil Pengujian Model</h2>
+          <i data-lucide="server" class="w-4 h-4 text-blue-400"></i>
+          <h2 class="text-xs font-bold uppercase tracking-wider text-slate-200">Model Ping Results</h2>
         </div>
-        <div class="flex items-center gap-2 text-xs text-slate-400">
-          <span id="progress-indicator" class="hidden font-mono text-cyan-400 flex items-center gap-1.5">
-            <span class="inline-block w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
-            <span id="progress-text">Memproses 0 / 0</span>
-          </span>
+        <div class="flex items-center gap-2">
+          <div id="live-progress-badge" class="hidden items-center gap-2 text-xs font-mono text-cyan-400 bg-cyan-500/10 border border-cyan-500/20 px-2.5 py-1 rounded-full">
+            <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping"></span>
+            <span id="live-progress-text">0 / 0</span>
+          </div>
         </div>
       </div>
 
-      <!-- Results Table -->
       <div class="overflow-x-auto custom-scrollbar">
-        <table class="w-full text-left border-collapse text-xs sm:text-sm">
+        <table class="w-full text-left border-collapse text-xs">
           <thead>
-            <tr class="border-b border-slate-800/80 bg-slate-950/40 text-slate-400 text-xs uppercase font-semibold tracking-wider">
-              <th class="py-3.5 px-4 w-12 text-center">#</th>
-              <th class="py-3.5 px-4">Nama Model</th>
-              <th class="py-3.5 px-4 w-32">Status</th>
-              <th class="py-3.5 px-4 w-32">Latency</th>
-              <th class="py-3.5 px-4 w-44">Kecepatan (TPS)</th>
-              <th class="py-3.5 px-4 min-w-[220px]">Cuplikan Respon</th>
-              <th class="py-3.5 px-4 w-24 text-right">Aksi</th>
+            <tr class="border-b border-slate-800/80 bg-slate-950/60 text-slate-400 text-[11px] uppercase font-mono font-semibold tracking-wider">
+              <th class="py-3 px-4 w-12 text-center">#</th>
+              <th class="py-3 px-4">Model ID</th>
+              <th class="py-3 px-4 w-36">Status</th>
+              <th class="py-3 px-4 w-28">Latency</th>
+              <th class="py-3 px-4 w-28">TPS</th>
+              <th class="py-3 px-4 min-w-[200px]">Response Preview</th>
+              <th class="py-3 px-4 w-24 text-right">Action</th>
             </tr>
           </thead>
-          <tbody id="models-table-body" class="divide-y divide-slate-800/50 font-mono">
-            <!-- Empty Placeholder -->
-            <tr id="empty-row">
+          <tbody id="results-tbody" class="divide-y divide-slate-800/50 font-mono">
+            <tr id="empty-state-row">
               <td colspan="7" class="py-16 text-center text-slate-500 font-sans">
-                <div class="flex flex-col items-center justify-center gap-3">
-                  <div class="w-12 h-12 rounded-2xl bg-slate-800/50 flex items-center justify-center text-slate-600">
-                    <i data-lucide="server" class="w-6 h-6"></i>
+                <div class="flex flex-col items-center justify-center gap-2.5">
+                  <div class="w-10 h-10 rounded-xl bg-slate-800/60 flex items-center justify-center text-slate-600">
+                    <i data-lucide="radio" class="w-5 h-5"></i>
                   </div>
-                  <div>
-                    <p class="text-sm font-medium text-slate-400">Belum ada data benchmark</p>
-                    <p class="text-xs text-slate-600 mt-0.5">Masukkan API Key lalu klik "Start Benchmark" untuk menguji model.</p>
-                  </div>
+                  <p class="text-xs font-medium text-slate-400">Siap melakukan ping test</p>
+                  <p class="text-[11px] text-slate-600">Klik tombol "Ping All" untuk mulai menguji semua model secara paralel.</p>
                 </div>
               </td>
             </tr>
@@ -303,80 +296,74 @@
   </main>
 
   <!-- Footer -->
-  <footer class="border-t border-slate-800/60 bg-slate-950/80 py-4 text-center text-xs text-slate-500 font-mono">
-    Juan AI Router Benchmark • Endpoint: https://router.juan.web.id/v1
+  <footer class="border-t border-slate-800/60 bg-slate-950/80 py-3.5 text-center text-[11px] text-slate-500 font-mono">
+    Juan AI Router Ping Tester • Base URL: https://router.juan.web.id/v1
   </footer>
 
-  <!-- Application Logic -->
+  <!-- Application Script -->
   <script>
-    // State Management
     const CONFIG = {
       baseUrl: 'https://router.juan.web.id/v1',
-      storageKey: 'juan_router_api_key',
-      storageSavePrefKey: 'juan_router_save_pref',
-      concurrency: 3,
-      timeoutMs: 30000,
+      storageKey: 'juan_router_ping_api_key',
+      rememberKey: 'juan_router_ping_remember',
+      concurrency: 8, // Fast concurrent batch
+      timeoutMs: 20000,
     };
 
     let state = {
       apiKey: '',
-      models: [], // Array of { id, status: 'idle'|'waiting'|'testing'|'online'|'error', latency: null, tokens: null, tps: null, response: '', error: '', timestamp: null }
+      models: [], // Array of { id, status: 'pending'|'pinging'|'online'|'error', latency: null, tokens: null, tps: null, response: '', error: '' }
       isRunning: false,
-      filterQuery: '',
-      filterStatus: 'all',
+      searchQuery: '',
+      filterTab: 'all',
       abortController: null,
     };
 
-    // DOM Elements
+    // Elements
     const apiKeyInput = document.getElementById('api-key-input');
-    const saveKeyCheckbox = document.getElementById('save-key-checkbox');
+    const rememberKeyCheckbox = document.getElementById('remember-key-checkbox');
     const toggleKeyVisibilityBtn = document.getElementById('toggle-key-visibility-btn');
     const toggleKeyIcon = document.getElementById('toggle-key-icon');
     const clearKeyBtn = document.getElementById('clear-key-btn');
-    const startBenchmarkBtn = document.getElementById('start-benchmark-btn');
-    const stopBenchmarkBtn = document.getElementById('stop-benchmark-btn');
-    const resetResultsBtn = document.getElementById('reset-results-btn');
-    const searchModelInput = document.getElementById('search-model-input');
-    const filterTabBtns = document.querySelectorAll('.filter-tab-btn');
-    const modelsTableBody = document.getElementById('models-table-body');
-    const emptyRow = document.getElementById('empty-row');
-    const progressIndicator = document.getElementById('progress-indicator');
-    const progressText = document.getElementById('progress-text');
+    const startPingBtn = document.getElementById('start-ping-btn');
+    const stopPingBtn = document.getElementById('stop-ping-btn');
+    const resetBtn = document.getElementById('reset-btn');
+    const searchInput = document.getElementById('search-input');
+    const filterTabs = document.querySelectorAll('.filter-tab');
+    const resultsTbody = document.getElementById('results-tbody');
+    const emptyStateRow = document.getElementById('empty-state-row');
+    const liveProgressBadge = document.getElementById('live-progress-badge');
+    const liveProgressText = document.getElementById('live-progress-text');
     const toastContainer = document.getElementById('toast-container');
-    const globalStatusDot = document.getElementById('global-status-dot');
-    const globalStatusText = document.getElementById('global-status-text');
+    const liveIndicatorDot = document.getElementById('live-indicator-dot');
+    const liveIndicatorText = document.getElementById('live-indicator-text');
 
     // Stats Elements
     const statTotal = document.getElementById('stat-total');
     const statOnline = document.getElementById('stat-online');
-    const statOnlinePct = document.getElementById('stat-online-pct');
+    const statOnlineRate = document.getElementById('stat-online-rate');
     const statError = document.getElementById('stat-error');
     const statAvgLatency = document.getElementById('stat-avg-latency');
-    const statMaxTps = document.getElementById('stat-max-tps');
 
-    // Initialize Application
     function init() {
-      // Load stored preferences
-      const savedPref = localStorage.getItem(CONFIG.storageSavePrefKey);
-      if (savedPref === 'true') {
-        saveKeyCheckbox.checked = true;
+      const remember = localStorage.getItem(CONFIG.rememberKey) === 'true';
+      if (remember) {
+        rememberKeyCheckbox.checked = true;
         const savedKey = localStorage.getItem(CONFIG.storageKey) || '';
         apiKeyInput.value = savedKey;
         state.apiKey = savedKey;
       }
-
-      setupEventListeners();
+      setupEvents();
       lucide.createIcons();
     }
 
-    // Toast Utility
-    function showToast(message, type = 'info') {
+    function showToast(msg, type = 'info') {
       const toast = document.createElement('div');
-      const bgColors = {
-        success: 'bg-emerald-950/90 border-emerald-500/40 text-emerald-200',
-        error: 'bg-rose-950/90 border-rose-500/40 text-rose-200',
-        warning: 'bg-amber-950/90 border-amber-500/40 text-amber-200',
-        info: 'bg-slate-900/90 border-slate-700 text-slate-200'
+      const colors = {
+        success: 'bg-emerald-950/95 border-emerald-500/40 text-emerald-200',
+        error: 'bg-rose-950/95 border-rose-500/40 text-rose-200',
+        warning: 'bg-amber-950/95 border-amber-500/40 text-amber-200',
+        info: 'bg-slate-900/95 border-slate-700 text-slate-200'
       };
       const icons = {
         success: 'check-circle-2',
@@ -385,38 +372,34 @@
         info: 'info'
       };
 
-      toast.className = `flex items-center gap-2.5 p-3.5 rounded-xl border shadow-xl backdrop-blur-md text-xs sm:text-sm font-sans transition-all duration-300 transform translate-y-2 opacity-0 pointer-events-auto ${bgColors[type] || bgColors.info}`;
+      toast.className = `flex items-center gap-2.5 p-3 rounded-xl border shadow-2xl backdrop-blur-md text-xs font-sans transition-all duration-300 transform translate-y-2 opacity-0 pointer-events-auto ${colors[type] || colors.info}`;
       toast.innerHTML = `
         <i data-lucide="${icons[type] || 'info'}" class="w-4 h-4 shrink-0"></i>
-        <div class="flex-1 font-medium leading-tight">${message}</div>
+        <div class="flex-1 font-medium leading-snug">${msg}</div>
       `;
-
       toastContainer.appendChild(toast);
       lucide.createIcons({ root: toast });
 
-      // Animate in
       requestAnimationFrame(() => {
         toast.classList.remove('translate-y-2', 'opacity-0');
       });
 
-      // Remove after 4s
       setTimeout(() => {
         toast.classList.add('opacity-0', 'scale-95');
-        setTimeout(() => toast.remove(), 300);
-      }, 4000);
+        setTimeout(() => toast.remove(), 250);
+      }, 3500);
     }
 
-    // Event Listeners Setup
-    function setupEventListeners() {
+    function setupEvents() {
       apiKeyInput.addEventListener('input', (e) => {
         state.apiKey = e.target.value.trim();
-        if (saveKeyCheckbox.checked) {
+        if (rememberKeyCheckbox.checked) {
           localStorage.setItem(CONFIG.storageKey, state.apiKey);
         }
       });
 
-      saveKeyCheckbox.addEventListener('change', (e) => {
-        localStorage.setItem(CONFIG.storageSavePrefKey, e.target.checked);
+      rememberKeyCheckbox.addEventListener('change', (e) => {
+        localStorage.setItem(CONFIG.rememberKey, e.target.checked);
         if (e.target.checked) {
           localStorage.setItem(CONFIG.storageKey, state.apiKey);
         } else {
@@ -425,47 +408,46 @@
       });
 
       toggleKeyVisibilityBtn.addEventListener('click', () => {
-        const isPassword = apiKeyInput.type === 'password';
-        apiKeyInput.type = isPassword ? 'text' : 'password';
-        toggleKeyIcon.setAttribute('data-lucide', isPassword ? 'eye-off' : 'eye');
+        const isPwd = apiKeyInput.type === 'password';
+        apiKeyInput.type = isPwd ? 'text' : 'password';
+        toggleKeyIcon.setAttribute('data-lucide', isPwd ? 'eye-off' : 'eye');
         lucide.createIcons();
       });
 
       clearKeyBtn.addEventListener('click', () => {
         apiKeyInput.value = '';
         state.apiKey = '';
-        if (saveKeyCheckbox.checked) {
+        if (rememberKeyCheckbox.checked) {
           localStorage.removeItem(CONFIG.storageKey);
         }
       });
 
-      startBenchmarkBtn.addEventListener('click', startAllBenchmarks);
-      stopBenchmarkBtn.addEventListener('click', stopBenchmark);
-      resetResultsBtn.addEventListener('click', resetAll);
+      startPingBtn.addEventListener('click', startPingAll);
+      stopPingBtn.addEventListener('click', stopPing);
+      resetBtn.addEventListener('click', resetState);
 
-      searchModelInput.addEventListener('input', (e) => {
-        state.filterQuery = e.target.value.toLowerCase().trim();
+      searchInput.addEventListener('input', (e) => {
+        state.searchQuery = e.target.value.toLowerCase().trim();
         renderTable();
       });
 
-      filterTabBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-          filterTabBtns.forEach(b => {
-            b.classList.remove('active', 'bg-slate-800', 'text-slate-100');
-            b.classList.add('text-slate-400');
+      filterTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          filterTabs.forEach(t => {
+            t.classList.remove('active', 'bg-slate-800', 'text-slate-100');
+            t.classList.add('text-slate-400');
           });
-          btn.classList.add('active', 'bg-slate-800', 'text-slate-100');
-          btn.classList.remove('text-slate-400');
-          state.filterStatus = btn.dataset.filter;
+          tab.classList.add('active', 'bg-slate-800', 'text-slate-100');
+          tab.classList.remove('text-slate-400');
+          state.filterTab = tab.dataset.filter;
           renderTable();
         });
       });
     }
 
-    // Benchmark Execution
-    async function startAllBenchmarks() {
+    async function startPingAll() {
       if (!state.apiKey) {
-        showToast('Harap masukkan API Key terlebih dahulu.', 'warning');
+        showToast('Masukkan API Key terlebih dahulu.', 'warning');
         apiKeyInput.focus();
         return;
       }
@@ -474,50 +456,46 @@
       state.abortController = new AbortController();
       updateControlsUI(true);
 
-      globalStatusDot.className = 'w-2 h-2 rounded-full bg-cyan-400 animate-ping';
-      globalStatusText.textContent = 'Mengambil daftar model...';
+      liveIndicatorDot.className = 'w-2 h-2 rounded-full bg-cyan-400 animate-ping';
+      liveIndicatorText.textContent = 'Fetching models...';
 
       try {
-        // Step 1: Fetch Models List
-        const models = await fetchModelsList();
+        const models = await fetchModelList();
         if (!models || models.length === 0) {
-          showToast('Tidak ada model ditemukan pada router ini.', 'warning');
-          stopBenchmark();
+          showToast('Tidak ada model ditemukan pada router.', 'warning');
+          stopPing();
           return;
         }
 
-        // Initialize state models
         state.models = models.map(m => ({
           id: m.id || m,
-          status: 'waiting',
+          status: 'pending',
           latency: null,
           tokens: null,
           tps: null,
           response: '',
-          error: '',
-          timestamp: null
+          error: ''
         }));
 
         renderStats();
         renderTable();
-        showToast(`Ditemukan ${state.models.length} model. Memulai pengujian...`, 'info');
+        showToast(`${state.models.length} model ditemukan. Menjalankan ping paralel...`, 'info');
 
-        // Step 2: Run Concurrent Testing Queue
-        await runQueue(CONFIG.concurrency);
+        await executeParallelPingPool(CONFIG.concurrency);
 
         if (state.isRunning) {
-          showToast('Benchmark selesai!', 'success');
+          showToast('Pengujian ping selesai!', 'success');
         }
       } catch (err) {
         if (err.name !== 'AbortError') {
-          showToast(err.message || 'Gagal menjalankan benchmark.', 'error');
+          showToast(err.message || 'Gagal memulai ping test.', 'error');
         }
       } finally {
-        stopBenchmark();
+        stopPing();
       }
     }
 
-    async function fetchModelsList() {
+    async function fetchModelList() {
       try {
         const res = await fetch(`${CONFIG.baseUrl}/models`, {
           method: 'GET',
@@ -529,57 +507,57 @@
         });
 
         if (res.status === 401) {
-          throw new Error('API Key tidak valid (401 Unauthorized). Periksa kembali key Anda.');
+          throw new Error('401 Unauthorized: API Key salah atau kedaluwarsa.');
         }
 
         if (!res.ok) {
-          throw new Error(`Gagal mengambil list model: HTTP ${res.status} ${res.statusText}`);
+          throw new Error(`HTTP ${res.status} saat fetch models: ${res.statusText}`);
         }
 
         const json = await res.json();
-        const list = Array.isArray(json) ? json : (json.data || []);
-        return list;
+        return Array.isArray(json) ? json : (json.data || []);
       } catch (err) {
-        if (err.message.includes('Failed to fetch') || err.name === 'TypeError') {
-          throw new Error('Gagal terhubung ke endpoint (Kemungkinan CORS error atau jaringan offline).');
+        if (err.name === 'TypeError' || err.message.includes('Failed to fetch')) {
+          throw new Error('Koneksi gagal: Cek CORS atau koneksi internet.');
         }
         throw err;
       }
     }
 
-    async function runQueue(concurrency = 3) {
-      let currentIndex = 0;
+    async function executeParallelPingPool(concurrency = 8) {
+      let index = 0;
       const total = state.models.length;
       let completed = 0;
 
-      progressIndicator.classList.remove('hidden');
-      updateProgress(0, total);
+      liveProgressBadge.classList.remove('hidden');
+      liveProgressBadge.classList.add('flex');
+      liveProgressText.textContent = `0 / ${total}`;
 
       const worker = async () => {
-        while (currentIndex < state.models.length && state.isRunning) {
-          const item = state.models[currentIndex++];
+        while (index < state.models.length && state.isRunning) {
+          const item = state.models[index++];
           if (!item) break;
 
-          item.status = 'testing';
+          item.status = 'pinging';
           renderTableRow(item.id);
 
-          await testSingleModel(item);
+          await pingModel(item);
           completed++;
-          updateProgress(completed, total);
+          liveProgressText.textContent = `${completed} / ${total}`;
           renderStats();
           renderTableRow(item.id);
         }
       };
 
       const workers = Array(Math.min(concurrency, total)).fill(0).map(() => worker());
-      await Promise.all(workers);
+      await Promise.allSettled(workers);
     }
 
-    async function testSingleModel(item) {
+    async function pingModel(item) {
       const startTime = performance.now();
       try {
         const timeoutSignal = AbortSignal.timeout(CONFIG.timeoutMs);
-        const combinedSignal = state.abortController 
+        const signal = state.abortController 
           ? AbortSignal.any([state.abortController.signal, timeoutSignal])
           : timeoutSignal;
 
@@ -591,41 +569,37 @@
           },
           body: JSON.stringify({
             model: item.id,
-            messages: [{ role: 'user', content: 'Tuliskan 1 kalimat motivasi singkat.' }],
-            max_tokens: 60,
-            stream: false
+            messages: [{ role: 'user', content: 'Ping test. Respond with only 1 word: pong' }],
+            max_tokens: 50,
+            temperature: 0.1
           }),
-          signal: combinedSignal
+          signal: signal
         });
 
         const endTime = performance.now();
         const durationMs = Math.round(endTime - startTime);
         item.latency = durationMs;
-        item.timestamp = new Date();
 
         if (!res.ok) {
-          let errorMsg = `HTTP ${res.status}`;
+          let errText = `HTTP ${res.status}`;
           try {
-            const errData = await res.json();
-            if (errData.error?.message) errorMsg += `: ${errData.error.message}`;
-            else if (typeof errData === 'string') errorMsg += `: ${errData}`;
+            const errJson = await res.json();
+            if (errJson.error?.message) errText += `: ${errJson.error.message}`;
+            else if (typeof errJson === 'string') errText += `: ${errJson}`;
           } catch (_) {
-            errorMsg += ` ${res.statusText || 'Error'}`;
+            errText += ` ${res.statusText || 'Failed'}`;
           }
           item.status = 'error';
-          item.error = errorMsg;
+          item.error = errText;
           return;
         }
 
         const data = await res.json();
-        const choice = data.choices?.[0];
-        const content = (choice?.message?.content || choice?.text || '').trim();
+        const content = (data.choices?.[0]?.message?.content || data.choices?.[0]?.text || '').trim();
 
-        // Calculate tokens
         let completionTokens = data.usage?.completion_tokens;
         if (typeof completionTokens !== 'number' || completionTokens <= 0) {
-          // Fallback: length / 4
-          completionTokens = Math.max(1, Math.round((content.length || 20) / 4));
+          completionTokens = Math.max(1, Math.round((content.length || 4) / 4));
         }
 
         const durationSec = durationMs / 1000;
@@ -634,80 +608,73 @@
         item.status = 'online';
         item.tokens = completionTokens;
         item.tps = parseFloat(tps);
-        item.response = content || '(Respon kosong)';
+        item.response = content || 'pong';
         item.error = '';
-
       } catch (err) {
-        const endTime = performance.now();
-        item.latency = Math.round(endTime - startTime);
+        item.latency = Math.round(performance.now() - startTime);
         item.status = 'error';
         if (err.name === 'TimeoutError') {
-          item.error = 'Request Timeout (>30s)';
+          item.error = 'Timeout (>20s)';
         } else if (err.name === 'AbortError') {
-          item.error = 'Dibatalkan oleh pengguna';
+          item.error = 'Canceled';
         } else {
-          item.error = err.message || 'Koneksi gagal / CORS error';
+          item.error = err.message || 'Connection Error';
         }
       }
     }
 
-    // Retest individual model
-    async function retestModel(modelId) {
+    async function rePingModel(modelId) {
       if (!state.apiKey) {
-        showToast('Harap masukkan API Key terlebih dahulu.', 'warning');
+        showToast('Masukkan API Key terlebih dahulu.', 'warning');
         return;
       }
 
       const item = state.models.find(m => m.id === modelId);
       if (!item) return;
 
-      item.status = 'testing';
+      item.status = 'pinging';
       item.error = '';
       renderTableRow(modelId);
 
-      await testSingleModel(item);
+      await pingModel(item);
       renderStats();
       renderTableRow(modelId);
-      showToast(`Model ${modelId} selesai diuji ulang.`, item.status === 'online' ? 'success' : 'error');
+      showToast(`Model ${modelId} diping: ${item.status === 'online' ? 'Online' : 'Error'}`, item.status === 'online' ? 'success' : 'error');
     }
 
-    function stopBenchmark() {
+    function stopPing() {
       state.isRunning = false;
       if (state.abortController) {
         state.abortController.abort();
         state.abortController = null;
       }
       updateControlsUI(false);
-      globalStatusDot.className = 'w-2 h-2 rounded-full bg-emerald-500';
-      globalStatusText.textContent = 'router.juan.web.id/v1';
-      progressIndicator.classList.add('hidden');
+      liveIndicatorDot.className = 'w-2 h-2 rounded-full bg-emerald-500';
+      liveIndicatorText.textContent = 'router.juan.web.id';
+      liveProgressBadge.classList.add('hidden');
+      liveProgressBadge.classList.remove('flex');
     }
 
-    function resetAll() {
-      stopBenchmark();
+    function resetState() {
+      stopPing();
       state.models = [];
-      state.filterQuery = '';
-      searchModelInput.value = '';
+      state.searchQuery = '';
+      searchInput.value = '';
       renderStats();
       renderTable();
-      showToast('Hasil benchmark telah direset.', 'info');
+      showToast('Semua status telah direset.', 'info');
     }
 
     function updateControlsUI(running) {
-      startBenchmarkBtn.disabled = running;
-      stopBenchmarkBtn.disabled = !running;
+      startPingBtn.disabled = running;
+      stopPingBtn.disabled = !running;
       if (running) {
-        startBenchmarkBtn.classList.add('opacity-50');
+        startPingBtn.classList.add('opacity-50');
       } else {
-        startBenchmarkBtn.classList.remove('opacity-50');
+        startPingBtn.classList.remove('opacity-50');
       }
     }
 
-    function updateProgress(done, total) {
-      progressText.textContent = `Menguji ${done} / ${total} model`;
-    }
-
-    // Render Stats
     function renderStats() {
       const total = state.models.length;
       const onlineModels = state.models.filter(m => m.status === 'online');
@@ -718,37 +685,31 @@
       statTotal.textContent = total;
       statOnline.textContent = onlineCount;
       const pct = total > 0 ? Math.round((onlineCount / total) * 100) : 0;
-      statOnlinePct.textContent = `(${pct}%)`;
+      statOnlineRate.textContent = `(${pct}%)`;
       statError.textContent = errorCount;
 
       if (onlineModels.length > 0) {
-        const totalLatency = onlineModels.reduce((acc, m) => acc + (m.latency || 0), 0);
-        const avgLat = Math.round(totalLatency / onlineModels.length);
-        statAvgLatency.textContent = avgLat;
-
-        const maxTps = Math.max(...onlineModels.map(m => m.tps || 0));
-        statMaxTps.textContent = maxTps > 0 ? maxTps.toFixed(1) : '0';
+        const totalLat = onlineModels.reduce((acc, m) => acc + (m.latency || 0), 0);
+        statAvgLatency.textContent = Math.round(totalLat / onlineModels.length);
       } else {
         statAvgLatency.textContent = '0';
-        statMaxTps.textContent = '0';
       }
     }
 
-    // Render Entire Table
     function renderTable() {
       const filtered = state.models.filter(m => {
-        const matchName = m.id.toLowerCase().includes(state.filterQuery);
-        if (state.filterStatus === 'all') return matchName;
-        if (state.filterStatus === 'online') return matchName && m.status === 'online';
-        if (state.filterStatus === 'error') return matchName && m.status === 'error';
+        const matchName = m.id.toLowerCase().includes(state.searchQuery);
+        if (state.filterTab === 'all') return matchName;
+        if (state.filterTab === 'online') return matchName && m.status === 'online';
+        if (state.filterTab === 'error') return matchName && m.status === 'error';
         return matchName;
       });
 
       if (filtered.length === 0) {
-        modelsTableBody.innerHTML = `
+        resultsTbody.innerHTML = `
           <tr>
             <td colspan="7" class="py-12 text-center text-slate-500 font-sans">
-              ${state.models.length === 0 ? emptyRow.innerHTML : 'Tidak ada model yang cocok dengan filter / pencarian.'}
+              ${state.models.length === 0 ? emptyStateRow.innerHTML : 'Tidak ada model yang sesuai kriteria pencarian / filter.'}
             </td>
           </tr>
         `;
@@ -756,22 +717,20 @@
         return;
       }
 
-      modelsTableBody.innerHTML = filtered.map((m, idx) => getTableRowHtml(m, idx + 1)).join('');
+      resultsTbody.innerHTML = filtered.map((m, idx) => getRowHtml(m, idx + 1)).join('');
       lucide.createIcons();
     }
 
-    // Render Single Row for Live Update
     function renderTableRow(modelId) {
-      const row = document.getElementById(`row-${sanitizeId(modelId)}`);
+      const row = document.getElementById(`row-${sanitize(modelId)}`);
       const item = state.models.find(m => m.id === modelId);
       if (!item) return;
 
       if (row) {
-        // Find 1-based index
         const index = state.models.indexOf(item) + 1;
-        const tempContainer = document.createElement('tbody');
-        tempContainer.innerHTML = getTableRowHtml(item, index);
-        const newRow = tempContainer.firstElementChild;
+        const temp = document.createElement('tbody');
+        temp.innerHTML = getRowHtml(item, index);
+        const newRow = temp.firstElementChild;
         row.replaceWith(newRow);
         lucide.createIcons({ root: newRow });
       } else {
@@ -779,92 +738,72 @@
       }
     }
 
-    function sanitizeId(id) {
-      return id.replace(/[^a-zA-Z0-9_-]/g, '_');
+    function sanitize(str) {
+      return str.replace(/[^a-zA-Z0-9_-]/g, '_');
     }
 
-    function getTableRowHtml(m, index) {
-      const sId = sanitizeId(m.id);
+    function getRowHtml(m, index) {
+      const sId = sanitize(m.id);
 
       // Status Badge
       let statusBadge = '';
       if (m.status === 'online') {
-        statusBadge = `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>Online</span>`;
+        statusBadge = `<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>Online</span>`;
       } else if (m.status === 'error') {
-        statusBadge = `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-rose-500/10 text-rose-400 border border-rose-500/20"><span class="w-1.5 h-1.5 rounded-full bg-rose-400"></span>Error</span>`;
-      } else if (m.status === 'testing') {
-        statusBadge = `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-cyan-500/10 text-cyan-400 border border-cyan-500/20"><span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping"></span>Testing</span>`;
+        statusBadge = `<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-rose-500/10 text-rose-400 border border-rose-500/20"><span class="w-1.5 h-1.5 rounded-full bg-rose-400"></span>Error</span>`;
+      } else if (m.status === 'pinging') {
+        statusBadge = `<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/20"><span class="w-1.5 h-1.5 rounded-full bg-blue-400 animate-ping"></span>Pinging</span>`;
       } else {
-        statusBadge = `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-800 text-slate-400"><span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span>Waiting</span>`;
+        statusBadge = `<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-slate-800 text-slate-400"><span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span>Pending</span>`;
       }
 
-      // Latency column
-      const latencyDisplay = m.latency !== null ? `<span class="font-bold ${m.latency < 1000 ? 'text-emerald-400' : m.latency < 3000 ? 'text-cyan-400' : 'text-amber-400'}">${m.latency}</span> <span class="text-slate-500 text-xs">ms</span>` : `<span class="text-slate-600">-</span>`;
+      // Latency
+      const latencyDisplay = m.latency !== null 
+        ? `<span class="font-bold ${m.latency < 800 ? 'text-emerald-400' : m.latency < 2500 ? 'text-cyan-400' : 'text-amber-400'}">${m.latency}</span> <span class="text-slate-500 text-[10px]">ms</span>`
+        : `<span class="text-slate-600">-</span>`;
 
-      // TPS & Visual Bar
-      let tpsDisplay = `<span class="text-slate-600">-</span>`;
-      if (m.tps !== null && m.status === 'online') {
-        const pct = Math.min(100, Math.round((m.tps / 80) * 100));
-        const colorClass = m.tps >= 50 ? 'from-cyan-400 to-emerald-400' : m.tps >= 25 ? 'from-cyan-500 to-blue-500' : 'from-amber-400 to-orange-400';
-        tpsDisplay = `
-          <div class="flex flex-col gap-1 w-full max-w-[140px]">
-            <div class="flex items-center justify-between text-xs">
-              <span class="font-bold text-slate-200">${m.tps}</span>
-              <span class="text-slate-500 text-[10px]">tokens/s</span>
-            </div>
-            <div class="w-full bg-slate-800/80 rounded-full h-1.5 overflow-hidden">
-              <div class="bg-gradient-to-r ${colorClass} h-full rounded-full transition-all duration-500" style="width: ${pct}%"></div>
-            </div>
-          </div>
-        `;
-      }
+      // TPS
+      const tpsDisplay = (m.tps !== null && m.status === 'online')
+        ? `<span class="font-bold text-slate-200">${m.tps}</span> <span class="text-slate-500 text-[10px]">t/s</span>`
+        : `<span class="text-slate-600">-</span>`;
 
-      // Response / Error Snippet
+      // Preview / Error
       let previewDisplay = '';
       if (m.status === 'online') {
-        previewDisplay = `
-          <div class="text-xs text-slate-300 bg-slate-950/60 p-2 rounded-lg border border-slate-800/60 max-w-sm line-clamp-2 hover:line-clamp-none transition-all cursor-default" title="${m.response.replace(/"/g, '&quot;')}">
-            "${m.response}"
-          </div>
-        `;
+        previewDisplay = `<span class="text-emerald-300/90 font-mono bg-emerald-950/20 px-2 py-0.5 rounded border border-emerald-900/30 text-[11px] truncate inline-block max-w-[280px]" title="${m.response.replace(/"/g, '&quot;')}">${m.response}</span>`;
       } else if (m.status === 'error') {
-        previewDisplay = `
-          <div class="text-xs text-rose-400/90 bg-rose-950/20 p-2 rounded-lg border border-rose-900/30 max-w-sm line-clamp-2" title="${m.error}">
-            ${m.error}
-          </div>
-        `;
-      } else if (m.status === 'testing') {
-        previewDisplay = `<span class="text-xs text-cyan-400/70 italic flex items-center gap-1.5"><i data-lucide="loader" class="w-3.5 h-3.5 animate-spin"></i> Mengirim prompt pengujian...</span>`;
+        previewDisplay = `<span class="text-rose-400/90 font-sans text-[11px] truncate inline-block max-w-[280px]" title="${m.error}">${m.error}</span>`;
+      } else if (m.status === 'pinging') {
+        previewDisplay = `<span class="text-blue-400/70 text-[11px] italic font-sans flex items-center gap-1.5"><i data-lucide="loader-2" class="w-3 h-3 animate-spin"></i> Pinging endpoint...</span>`;
       } else {
-        previewDisplay = `<span class="text-xs text-slate-600 italic">Menunggu antrean...</span>`;
+        previewDisplay = `<span class="text-slate-600 text-[11px] italic font-sans">Menunggu...</span>`;
       }
 
       return `
-        <tr id="row-${sId}" class="hover:bg-slate-800/30 transition-colors">
-          <td class="py-3.5 px-4 text-center text-slate-500 text-xs">${index}</td>
-          <td class="py-3.5 px-4">
-            <div class="font-semibold text-slate-200">${m.id}</div>
+        <tr id="row-${sId}" class="hover:bg-slate-800/25 transition-colors">
+          <td class="py-2.5 px-4 text-center text-slate-500 text-[11px]">${index}</td>
+          <td class="py-2.5 px-4">
+            <span class="font-semibold text-slate-200 text-xs">${m.id}</span>
           </td>
-          <td class="py-3.5 px-4">${statusBadge}</td>
-          <td class="py-3.5 px-4">${latencyDisplay}</td>
-          <td class="py-3.5 px-4">${tpsDisplay}</td>
-          <td class="py-3.5 px-4">${previewDisplay}</td>
-          <td class="py-3.5 px-4 text-right">
+          <td class="py-2.5 px-4">${statusBadge}</td>
+          <td class="py-2.5 px-4 font-mono">${latencyDisplay}</td>
+          <td class="py-2.5 px-4 font-mono">${tpsDisplay}</td>
+          <td class="py-2.5 px-4">${previewDisplay}</td>
+          <td class="py-2.5 px-4 text-right">
             <button 
               type="button" 
-              onclick="retestModel('${m.id}')" 
-              class="p-1.5 rounded-lg text-slate-400 hover:text-cyan-300 hover:bg-slate-800 transition-colors inline-flex items-center gap-1"
-              title="Test ulang model ${m.id}"
+              onclick="rePingModel('${m.id}')" 
+              class="px-2.5 py-1 rounded-lg text-slate-400 hover:text-cyan-300 hover:bg-slate-800 transition-colors inline-flex items-center gap-1 font-sans text-xs"
+              title="Re-ping model"
             >
-              <i data-lucide="play" class="w-3.5 h-3.5"></i>
-              <span class="text-[11px] font-sans">Test</span>
+              <i data-lucide="refresh-cw" class="w-3 h-3"></i>
+              <span>Ping</span>
             </button>
           </td>
         </tr>
       `;
     }
 
-    // Boot
     document.addEventListener('DOMContentLoaded', init);
   </script>
 </body>
