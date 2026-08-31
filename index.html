@@ -594,10 +594,38 @@
           return;
         }
 
-        const data = await res.json();
-        const content = (data.choices?.[0]?.message?.content || data.choices?.[0]?.text || '').trim();
+        // Router returns SSE stream (text/event-stream) or standard JSON
+        const rawText = await res.text();
+        let content = '';
+        let completionTokens = 0;
 
-        let completionTokens = data.usage?.completion_tokens;
+        try {
+          // Attempt standard JSON parse
+          const data = JSON.parse(rawText);
+          content = (data.choices?.[0]?.message?.content || data.choices?.[0]?.text || '').trim();
+          completionTokens = data.usage?.completion_tokens;
+        } catch (_) {
+          // Parse SSE stream format: data: {"id"...}\n\ndata: [DONE]
+          const lines = rawText.split('\n');
+          for (const line of lines) {
+            const trimmed = line.trim();
+            if (!trimmed || !trimmed.startsWith('data:')) continue;
+            const payload = trimmed.slice(5).trim();
+            if (payload === '[DONE]') continue;
+            try {
+              const chunk = JSON.parse(payload);
+              const delta = chunk.choices?.[0]?.delta?.content || chunk.choices?.[0]?.text || '';
+              content += delta;
+              if (chunk.usage?.completion_tokens) {
+                completionTokens = chunk.usage.completion_tokens;
+              }
+            } catch (e) {
+              // Ignore unparseable chunk
+            }
+          }
+          content = content.trim();
+        }
+
         if (typeof completionTokens !== 'number' || completionTokens <= 0) {
           completionTokens = Math.max(1, Math.round((content.length || 4) / 4));
         }
