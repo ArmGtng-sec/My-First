@@ -2,174 +2,759 @@
 <html lang="id">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#f4f1eb">
-  <title>Ruang Chat</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+  <meta name="theme-color" content="#121316">
+  <title>Chat</title>
   <style>
     :root {
-      color-scheme: light;
-      --paper: #f5f5f3;
-      --surface: #ffffff;
-      --surface-2: #eeeee9;
-      --ink: #1d1e1b;
-      --muted: #73746e;
-      --line: #deded8;
-      --accent: #b94731;
-      --accent-soft: #f5ddd7;
-      --user: #242522;
-      --danger: #a72d23;
-      --code: #f0f0eb;
-      --radius: 16px;
+      color-scheme: dark light;
+      --bg: #0f1013;
+      --surface: #18191e;
+      --surface-hover: #22242b;
+      --surface-border: #282a32;
+      --text: #f0f1f5;
+      --text-muted: #8a8d9b;
+      --text-subtle: #5d606f;
+      --primary: #3b82f6;
+      --primary-hover: #2563eb;
+      --primary-subtle: rgba(59, 130, 246, 0.12);
+      --user-msg-bg: #2563eb;
+      --user-msg-text: #ffffff;
+      --assistant-msg-bg: #18191e;
+      --code-bg: #0b0c0e;
+      --danger: #ef4444;
+      --danger-subtle: rgba(239, 68, 68, 0.12);
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
     }
-    @media (prefers-color-scheme: dark) {
-      :root { color-scheme: dark; --paper: #171816; --surface: #22231f; --surface-2: #2a2b27; --ink: #eeeeda; --muted: #a5a69d; --line: #393a35; --accent: #e26b51; --accent-soft: #43251f; --user: #e8e9df; --code: #171816; }
-      .user .bubble { color: #191a17; }
+
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg: #f8fafc;
+        --surface: #ffffff;
+        --surface-hover: #f1f5f9;
+        --surface-border: #e2e8f0;
+        --text: #0f172a;
+        --text-muted: #64748b;
+        --text-subtle: #94a3b8;
+        --primary: #2563eb;
+        --primary-hover: #1d4ed8;
+        --primary-subtle: rgba(37, 99, 235, 0.08);
+        --user-msg-bg: #2563eb;
+        --user-msg-text: #ffffff;
+        --assistant-msg-bg: #ffffff;
+        --code-bg: #0f172a;
+        --danger: #dc2626;
+        --danger-subtle: rgba(220, 38, 38, 0.08);
+      }
     }
-    * { box-sizing: border-box; }
-    body { margin: 0; min-width: 320px; background: var(--paper); color: var(--ink); font: 15px/1.55 Arial, Helvetica, sans-serif; }
-    button, select, textarea { font: inherit; }
-    button { cursor: pointer; }
-    .app { min-height: 100svh; display: flex; flex-direction: column; max-width: 760px; margin: auto; }
-    header { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: calc(14px + env(safe-area-inset-top)) 18px 14px; border-bottom: 1px solid var(--line); background: color-mix(in srgb, var(--paper) 92%, transparent); position: sticky; top: 0; z-index: 2; backdrop-filter: blur(12px); }
-    .brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
-    .mark { width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; background: var(--accent); color: white; font-weight: 700; }
-    h1 { font-size: 17px; line-height: 1.1; margin: 0; letter-spacing: 0; }
-    .status { color: var(--muted); font-size: 11px; margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 220px; }
-    .clear { border: 1px solid var(--line); background: transparent; color: var(--muted); border-radius: 10px; min-width: 44px; height: 40px; font-size: 18px; transition: .18s ease; }
-    .clear:hover, .clear:focus-visible { color: var(--ink); border-color: var(--ink); outline: none; }
-    main { flex: 1; display: flex; flex-direction: column; padding: 22px 14px max(16px, env(safe-area-inset-bottom)); }
-    #messages { flex: 1; display: flex; flex-direction: column; gap: 20px; padding-bottom: 18px; }
-    .welcome { margin: auto 10px; max-width: 460px; }
-    .welcome .eyebrow { color: var(--accent); text-transform: uppercase; letter-spacing: .12em; font-size: 11px; font-weight: 700; }
-    .welcome h2 { font: 400 31px/1.08 Georgia, 'Times New Roman', serif; margin: 8px 0 10px; }
-    .welcome p { margin: 0; color: var(--muted); }
-    .message { display: flex; flex-direction: column; max-width: 92%; gap: 5px; animation: appear .2s ease both; }
-    .message.user { align-self: flex-end; align-items: flex-end; max-width: 84%; }
-    .message.assistant { align-self: flex-start; width: 100%; }
-    .bubble { padding: 12px 14px; border-radius: var(--radius); overflow-wrap: anywhere; }
-    .user .bubble { background: var(--user); color: #fff; border-bottom-right-radius: 5px; white-space: pre-wrap; }
-    .assistant .bubble { background: transparent; border: 0; padding: 0 4px; border-bottom-left-radius: 5px; }
-    .assistant .bubble p { margin: 0 0 12px; }.assistant .bubble p:last-child { margin-bottom: 0; }
-    .assistant .bubble h1, .assistant .bubble h2, .assistant .bubble h3 { font-family: Georgia, 'Times New Roman', serif; line-height: 1.2; margin: 16px 0 8px; }
-    .assistant .bubble h1 { font-size: 24px; }.assistant .bubble h2 { font-size: 20px; }.assistant .bubble h3 { font-size: 17px; }
-    .assistant .bubble ul, .assistant .bubble ol { margin: 6px 0 14px; padding-left: 23px; }.assistant .bubble li { margin: 4px 0; }
-    .assistant .bubble blockquote { margin: 10px 0; padding-left: 14px; border-left: 3px solid var(--line); color: var(--muted); }
-    .assistant .bubble code { background: var(--surface-2); border-radius: 5px; padding: 2px 5px; font: 13px/1.4 ui-monospace, SFMono-Regular, Consolas, monospace; }
-    .assistant .bubble pre { position: relative; margin: 12px 0; padding: 14px; overflow: auto; background: var(--code); border: 1px solid var(--line); border-radius: 10px; }
-    .assistant .bubble pre code { padding: 0; background: transparent; white-space: pre; }
-    .assistant .bubble a { color: var(--accent); }.meta { color: var(--muted); font-size: 10px; padding: 0 5px; }
-    .assistant-actions { display: flex; gap: 5px; margin-top: 4px; }.copy { border: 0; background: transparent; color: var(--muted); font-size: 11px; padding: 4px 5px; }.copy:hover { color: var(--ink); }
-    .composer { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 10px; box-shadow: 0 8px 30px rgba(47,42,33,.06); }
-    .toolbar { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
-    label { color: var(--muted); font-size: 11px; }
-    select { min-width: 0; flex: 1; border: 0; background: transparent; color: var(--ink); font-size: 12px; font-weight: 700; outline: none; }
-    .model-state { font-size: 11px; color: var(--muted); }.model-state.error { color: var(--danger); }
-    .input-row { display: flex; align-items: flex-end; gap: 8px; }.input-row:focus-within { outline: 2px solid var(--accent-soft); outline-offset: 4px; border-radius: 8px; }
-    textarea { width: 100%; resize: none; min-height: 44px; max-height: 140px; border: 0; outline: 0; background: transparent; color: var(--ink); padding: 10px 7px 7px; }
-    textarea::placeholder { color: #9b9b95; }.send { width: 44px; height: 44px; flex: 0 0 44px; border: 0; border-radius: 13px; background: var(--accent); color: #fff; font-size: 20px; line-height: 1; transition: transform .18s ease, opacity .18s ease; }.send:hover:not(:disabled) { transform: translateY(-2px); }.send:disabled { opacity: .45; cursor: wait; }
-    .hint { text-align: center; color: var(--muted); font-size: 10px; margin: 9px 0 0; }
-    .typing { display: inline-flex; gap: 4px; align-items: center; padding: 15px 16px; background: var(--surface-2); border-radius: 12px; }.typing i { width: 5px; height: 5px; border-radius: 50%; background: var(--muted); animation: pulse 1s infinite alternate; }.typing i:nth-child(2) { animation-delay: .2s; }.typing i:nth-child(3) { animation-delay: .4s; }
-    @keyframes pulse { to { opacity: .25; transform: translateY(-2px); } } @keyframes appear { from { opacity: 0; transform: translateY(4px); } }
-    @media (min-width: 700px) { main { padding: 34px 24px 24px; } header { padding-left: 24px; padding-right: 24px; } }
-    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; } }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-size: 15px;
+      line-height: 1.5;
+      height: 100svh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* Header */
+    header {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: max(12px, env(safe-area-inset-top)) 16px 12px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--surface-border);
+      z-index: 10;
+      gap: 12px;
+    }
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+    .app-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-sm);
+      background: var(--primary);
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+    .model-picker-wrap {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+    .model-select {
+      appearance: none;
+      background: transparent;
+      border: none;
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 600;
+      padding-right: 18px;
+      cursor: pointer;
+      outline: none;
+      max-width: 220px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238a8d9b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right center;
+    }
+    .status-text {
+      font-size: 11px;
+      color: var(--text-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .status-text.error { color: var(--danger); }
+    .icon-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--surface-border);
+      background: transparent;
+      color: var(--text-muted);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      flex-shrink: 0;
+    }
+    .icon-btn:hover:not(:disabled) {
+      background: var(--surface-hover);
+      color: var(--text);
+    }
+    .icon-btn:active:not(:disabled) { transform: scale(0.95); }
+
+    /* Chat Area */
+    #chat-container {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      scroll-behavior: smooth;
+    }
+    .welcome-card {
+      margin: auto;
+      max-width: 420px;
+      text-align: center;
+      padding: 32px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+    .welcome-badge {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--primary);
+      background: var(--primary-subtle);
+      padding: 4px 10px;
+      border-radius: 99px;
+    }
+    .welcome-card h2 {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text);
+      margin-top: 4px;
+    }
+    .welcome-card p {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    /* Message Bubbles */
+    .msg-row {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      gap: 4px;
+      animation: fadeIn 0.2s ease-out;
+    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+    .msg-row.user { align-items: flex-end; }
+    .msg-row.assistant { align-items: flex-start; }
+
+    .msg-bubble {
+      max-width: 88%;
+      padding: 12px 16px;
+      border-radius: var(--radius-md);
+      font-size: 15px;
+      line-height: 1.55;
+      word-break: break-word;
+      overflow-wrap: anywhere;
+    }
+    .msg-row.user .msg-bubble {
+      background: var(--user-msg-bg);
+      color: var(--user-msg-text);
+      border-bottom-right-radius: 4px;
+      white-space: pre-wrap;
+    }
+    .msg-row.assistant .msg-bubble {
+      background: var(--assistant-msg-bg);
+      color: var(--text);
+      border: 1px solid var(--surface-border);
+      border-bottom-left-radius: 4px;
+      max-width: 95%;
+      width: fit-content;
+    }
+
+    /* Markdown inside Assistant Bubble */
+    .msg-bubble p { margin-bottom: 10px; }
+    .msg-bubble p:last-child { margin-bottom: 0; }
+    .msg-bubble h1, .msg-bubble h2, .msg-bubble h3 {
+      font-weight: 700;
+      margin: 14px 0 6px;
+      line-height: 1.3;
+    }
+    .msg-bubble h1 { font-size: 19px; }
+    .msg-bubble h2 { font-size: 17px; }
+    .msg-bubble h3 { font-size: 15px; }
+    .msg-bubble ul, .msg-bubble ol { margin: 6px 0 10px 20px; }
+    .msg-bubble li { margin-bottom: 4px; }
+    .msg-bubble blockquote {
+      border-left: 3px solid var(--primary);
+      padding-left: 10px;
+      color: var(--text-muted);
+      margin: 8px 0;
+      font-style: italic;
+    }
+    .msg-bubble a { color: var(--primary); text-decoration: underline; }
+    .msg-bubble code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 13px;
+      background: var(--surface-border);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    .code-block-wrap {
+      margin: 10px 0;
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      border: 1px solid var(--surface-border);
+      background: var(--code-bg);
+    }
+    .code-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 12px;
+      background: rgba(255,255,255,0.04);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      font-size: 11px;
+      color: #94a3b8;
+      font-family: ui-monospace, monospace;
+    }
+    .code-copy-btn {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      font-size: 11px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .code-copy-btn:hover { color: #fff; }
+    .code-block-wrap pre {
+      padding: 12px;
+      overflow-x: auto;
+      margin: 0;
+    }
+    .code-block-wrap code {
+      background: transparent;
+      padding: 0;
+      border-radius: 0;
+      color: #e2e8f0;
+      font-size: 13px;
+      line-height: 1.45;
+      display: block;
+      white-space: pre;
+    }
+
+    /* Actions under bubble */
+    .msg-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0 4px;
+    }
+    .msg-meta {
+      font-size: 11px;
+      color: var(--text-subtle);
+    }
+    .action-link {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 11px;
+      cursor: pointer;
+      padding: 2px 4px;
+    }
+    .action-link:hover { color: var(--text); }
+
+    /* Streaming Cursor */
+    .cursor-blink {
+      display: inline-block;
+      width: 6px;
+      height: 14px;
+      background: var(--primary);
+      vertical-align: middle;
+      margin-left: 2px;
+      animation: blink 0.8s infinite;
+    }
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+    /* Footer & Composer */
+    footer {
+      flex-shrink: 0;
+      padding: 10px 16px max(12px, env(safe-area-inset-bottom));
+      background: var(--surface);
+      border-top: 1px solid var(--surface-border);
+    }
+    .input-box {
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+      background: var(--bg);
+      border: 1px solid var(--surface-border);
+      border-radius: var(--radius-lg);
+      padding: 6px 6px 6px 14px;
+      transition: border-color 0.15s ease;
+    }
+    .input-box:focus-within {
+      border-color: var(--primary);
+    }
+    textarea {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 15px;
+      line-height: 1.4;
+      resize: none;
+      max-height: 120px;
+      min-height: 24px;
+      padding: 6px 0;
+    }
+    textarea::placeholder { color: var(--text-muted); }
+    .send-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--primary);
+      border: none;
+      color: #ffffff;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: all 0.15s ease;
+    }
+    .send-btn:hover:not(:disabled) { background: var(--primary-hover); }
+    .send-btn:disabled {
+      background: var(--surface-border);
+      color: var(--text-muted);
+      cursor: not-allowed;
+    }
+    .send-btn.stop {
+      background: var(--danger);
+    }
   </style>
 </head>
 <body>
-  <div class="app">
-    <header>
-      <div class="brand"><div class="mark" aria-hidden="true">R</div><div><h1>Ruang Chat</h1><div id="status" class="status">Menghubungkan ke router...</div></div></div>
-      <button class="clear" id="clear" type="button" aria-label="Hapus percakapan" title="Hapus percakapan">⌫</button>
-    </header>
-    <main>
-      <section id="messages" aria-live="polite">
-        <div class="welcome" id="welcome"><div class="eyebrow">Percakapan baru</div><h2>Tulis apa yang ingin kamu pikirkan.</h2><p>Pilih model di bawah, lalu mulai dari pesan pertama.</p></div>
-      </section>
-      <form class="composer" id="composer">
-        <div class="toolbar"><label for="model">MODEL</label><select id="model" aria-label="Pilih model"><option>Memuat model...</option></select><span id="modelState" class="model-state">...</span></div>
-        <div class="input-row"><textarea id="prompt" rows="1" placeholder="Ketik pesan..." aria-label="Pesan" required></textarea><button class="send" id="send" type="submit" aria-label="Kirim pesan" title="Kirim pesan">↑</button></div>
-        <div class="hint">Enter untuk kirim · Shift + Enter untuk baris baru</div>
-      </form>
-    </main>
-  </div>
-  <script>
-    const BASE_URL = 'https://router.juan.web.id/v1';
-    const API_KEY = 'sk-pqqwcSaE6KTsrd96oih3EI7VWiuaB5tZTQ1Sup2JBV295ipJ';
-    const state = { messages: [], model: '' };
-    const $ = id => document.getElementById(id);
+  <header>
+    <div class="header-left">
+      <div class="app-icon">AI</div>
+      <div class="model-picker-wrap">
+        <select id="model-select" class="model-select" aria-label="Pilih Model">
+          <option value="">Memuat model...</option>
+        </select>
+        <span id="status-label" class="status-text">Menghubungkan...</span>
+      </div>
+    </div>
+    <button id="clear-btn" class="icon-btn" title="Hapus chat" aria-label="Hapus chat">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+    </button>
+  </header>
 
-    function setStatus(text, error = false) { $('status').textContent = text; $('modelState').textContent = error ? 'gagal' : (state.model ? 'siap' : '...'); $('modelState').className = 'model-state' + (error ? ' error' : ''); }
-    function markdown(text) {
-      const escaped = text.replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
-      const blocks = []; const safe = escaped.replace(/```([\\w+-]*)\\n?([\\s\\S]*?)```/g, (_, lang, code) => { blocks.push('<pre><code>' + code.trim() + '</code></pre>'); return `@@CODE${blocks.length - 1}@@`; });
-      let html = safe.replace(/^### (.+)$/gm, '<h3>$1</h3>').replace(/^## (.+)$/gm, '<h2>$1</h2>').replace(/^# (.+)$/gm, '<h1>$1</h1>')
-        .replace(/^> (.+)$/gm, '<blockquote>$1</blockquote>').replace(/\\*\\*(.+?)\\*\\*/g, '<strong>$1</strong>').replace(/\\*(.+?)\\*/g, '<em>$1</em>')
-        .replace(/`([^`]+)`/g, '<code>$1</code>').replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>')
-        .replace(/^(?:[-*] .+(?:\\n|$))+?/gm, list => '<ul>' + list.trim().split(/\\n/).map(item => '<li>' + item.slice(2) + '</li>').join('') + '</ul>')
-        .replace(/^(?:\\d+\\. .+(?:\\n|$))+?/gm, list => '<ol>' + list.trim().split(/\\n/).map(item => '<li>' + item.replace(/^\\d+\\. /, '') + '</li>').join('') + '</ol>')
-        .split(/\\n{2,}/).map(part => /^<(?:h[1-3]|ul|ol|blockquote|pre)/.test(part) ? part : '<p>' + part.replace(/\\n/g, '<br>') + '</p>').join('');
-      return html.replace(/@@CODE(\\d+)@@/g, (_, index) => blocks[index]);
+  <main id="chat-container">
+    <div id="welcome-card" class="welcome-card">
+      <span class="welcome-badge">Siap Digunakan</span>
+      <h2>Mulai Percakapan</h2>
+      <p>Pilih model di atas dan ketik pesan untuk memulai interaksi langsung dengan router AI.</p>
+    </div>
+  </main>
+
+  <footer>
+    <form id="chat-form" class="input-box">
+      <textarea id="user-input" rows="1" placeholder="Ketik pesan..." required></textarea>
+      <button type="submit" id="submit-btn" class="send-btn" title="Kirim" aria-label="Kirim">
+        <svg id="send-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 14-7-7 14-2-5-5-2Z"/></svg>
+        <svg id="stop-icon" style="display:none;" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect width="16" height="16" x="4" y="4" rx="2"/></svg>
+      </button>
+    </form>
+  </footer>
+
+  <script>
+    // ponytail: Simple client-side app with direct token embedded for demo/testing. In production, use backend proxy.
+    const CONFIG = {
+      baseUrl: 'https://router.juan.web.id/v1',
+      apiKey: 'sk-pqqwcSaE6KTsrd96oih3EI7VWiuaB5tZTQ1Sup2JBV295ipJ'
+    };
+
+    const state = {
+      messages: [],
+      models: [],
+      currentModel: '',
+      isGenerating: false,
+      abortController: null
+    };
+
+    const dom = {
+      modelSelect: document.getElementById('model-select'),
+      statusLabel: document.getElementById('status-label'),
+      chatContainer: document.getElementById('chat-container'),
+      welcomeCard: document.getElementById('welcome-card'),
+      chatForm: document.getElementById('chat-form'),
+      userInput: document.getElementById('user-input'),
+      submitBtn: document.getElementById('submit-btn'),
+      sendIcon: document.getElementById('send-icon'),
+      stopIcon: document.getElementById('stop-icon'),
+      clearBtn: document.getElementById('clear-btn')
+    };
+
+    function escapeHtml(text) {
+      return text.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
     }
-    function addMessage(role, content, live = false) {
-      state.messages.push({ role, content }); $('welcome').hidden = true;
-      const wrap = document.createElement('div'); wrap.className = 'message ' + role;
-      const bubble = document.createElement('div'); bubble.className = 'bubble';
-      if (role === 'assistant') bubble.innerHTML = markdown(content); else bubble.textContent = content;
-      const meta = document.createElement('div'); meta.className = 'meta'; meta.textContent = role === 'user' ? 'Kamu' : 'Asisten';
-      wrap.append(bubble, meta); if (role === 'assistant' && !live) addAssistantActions(wrap, content); $('messages').append(wrap); wrap.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); return { wrap, bubble };
+
+    function renderMarkdown(md) {
+      if (!md) return '';
+      const codeBlocks = [];
+      let text = escapeHtml(md);
+
+      // Extract code blocks
+      text = text.replace(/```([a-zA-Z0-9_-]*)\n?([\s\S]*?)```/g, (match, lang, code) => {
+        const id = codeBlocks.length;
+        const language = lang.trim() || 'code';
+        const cleanCode = code.trim();
+        codeBlocks.push({ id, language, cleanCode });
+        return `%%%CODE_BLOCK_${id}%%%`;
+      });
+
+      // Headers
+      text = text.replace(/^### (.*$)/gim, '<h3>$1</h3>');
+      text = text.replace(/^## (.*$)/gim, '<h2>$1</h2>');
+      text = text.replace(/^# (.*$)/gim, '<h1>$1</h1>');
+
+      // Blockquotes
+      text = text.replace(/^\> (.*$)/gim, '<blockquote>$1</blockquote>');
+
+      // Bold & Italic
+      text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+      text = text.replace(/\*(.*?)\*/g, '<em>$1</em>');
+
+      // Inline code
+      text = text.replace(/`([^`]+)`/g, '<code>$1</code>');
+
+      // Links
+      text = text.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+
+      // Lists
+      text = text.replace(/(?:^[-*]\s+.+(?:\n|$))+/gm, block => {
+        const items = block.trim().split(/\n/).map(line => `<li>${line.replace(/^[-*]\s+/, '')}</li>`).join('');
+        return `<ul>${items}</ul>`;
+      });
+
+      text = text.replace(/(?:^\d+\.\s+.+(?:\n|$))+/gm, block => {
+        const items = block.trim().split(/\n/).map(line => `<li>${line.replace(/^\d+\.\s+/, '')}</li>`).join('');
+        return `<ol>${items}</ol>`;
+      });
+
+      // Paragraphs
+      const paragraphs = text.split(/\n{2,}/).map(p => {
+        p = p.trim();
+        if (!p) return '';
+        if (/^<(h[1-3]|ul|ol|blockquote)/.test(p)) return p;
+        return `<p>${p.replace(/\n/g, '<br>')}</p>`;
+      }).filter(Boolean).join('');
+
+      // Re-insert code blocks
+      return paragraphs.replace(/%%%CODE_BLOCK_(\d+)%%%/g, (match, idx) => {
+        const block = codeBlocks[idx];
+        return `
+          <div class="code-block-wrap">
+            <div class="code-header">
+              <span>${block.language}</span>
+              <button class="code-copy-btn" onclick="copyCode(this, ${block.id})">Salin</button>
+            </div>
+            <pre><code id="code-snippet-${block.id}">${block.cleanCode}</code></pre>
+          </div>
+        `;
+      });
     }
-    function addAssistantActions(wrap, content) { const actions = document.createElement('div'); actions.className = 'assistant-actions'; const copy = document.createElement('button'); copy.className = 'copy'; copy.type = 'button'; copy.textContent = 'Salin'; copy.onclick = async () => { await navigator.clipboard.writeText(content); copy.textContent = 'Tersalin'; setTimeout(() => copy.textContent = 'Salin', 1200); }; actions.append(copy); wrap.append(actions); }
-    function typing(show) { const old = $('typing'); if (old) old.remove(); if (show) { const el = document.createElement('div'); el.id = 'typing'; el.className = 'message assistant'; el.innerHTML = '<div class="bubble typing"><i></i><i></i><i></i></div>'; $('messages').append(el); el.scrollIntoView({ block: 'nearest' }); } }
-    async function api(path, options = {}) {
-      const response = await fetch(BASE_URL + path, { ...options, headers: { Authorization: 'Bearer ' + API_KEY, 'Content-Type': 'application/json', ...(options.headers || {}) } });
-      if (!response.ok) throw new Error((await response.text()).slice(0, 180) || response.statusText);
-      return response.json();
+
+    window.copyCode = function(btn, id) {
+      const codeEl = document.getElementById(`code-snippet-${id}`);
+      if (!codeEl) return;
+      navigator.clipboard.writeText(codeEl.innerText).then(() => {
+        const orig = btn.innerText;
+        btn.innerText = 'Tersalin!';
+        setTimeout(() => { btn.innerText = orig; }, 1500);
+      });
+    };
+
+    function setStatus(text, isError = false) {
+      dom.statusLabel.textContent = text;
+      dom.statusLabel.className = 'status-text' + (isError ? ' error' : '');
     }
-    async function streamChat(messages, onDelta) {
-      const response = await fetch(BASE_URL + '/chat/completions', { method: 'POST', headers: { Authorization: 'Bearer ' + API_KEY, 'Content-Type': 'application/json', Accept: 'text/event-stream' }, body: JSON.stringify({ model: state.model, messages, temperature: 0.7, stream: true }) });
-      if (!response.ok) throw new Error((await response.text()).slice(0, 180) || response.statusText);
-      if (!response.body) throw new Error('Browser tidak mendukung response stream');
-      const reader = response.body.getReader(); const decoder = new TextDecoder(); let buffer = ''; let answer = '';
-      const consume = event => {
-        const data = event.split(/\r?\n/).filter(line => line.startsWith('data:')).map(line => line.slice(5).trim()).join('');
-        if (!data || data === '[DONE]') return;
-        const chunk = JSON.parse(data); const delta = chunk.choices?.[0]?.delta?.content;
-        if (typeof delta === 'string') { answer += delta; onDelta(answer); }
-      };
-      while (true) { const { value, done } = await reader.read(); buffer += decoder.decode(value || new Uint8Array(), { stream: !done }); const events = buffer.split(/\r?\n\r?\n/); buffer = events.pop() || ''; events.forEach(consume); if (done) break; }
-      if (buffer.trim()) consume(buffer); return answer;
+
+    function scrollToBottom() {
+      dom.chatContainer.scrollTop = dom.chatContainer.scrollHeight;
     }
-    function liveAssistant() {
-      typing(false); $('welcome').hidden = true;
-      const wrap = document.createElement('div'); wrap.className = 'message assistant';
-      const bubble = document.createElement('div'); bubble.className = 'bubble';
-      const meta = document.createElement('div'); meta.className = 'meta'; meta.textContent = 'Asisten';
-      wrap.append(bubble, meta); $('messages').append(wrap); return { wrap, bubble };
-    }
+
     async function loadModels() {
+      setStatus('Memuat model...');
       try {
-        const payload = await api('/models');
-        const models = (payload.data || []).map(item => item.id).filter(Boolean);
-        if (!models.length) throw new Error('Router tidak mengirim model');
-        state.model = models[0]; $('model').replaceChildren(...models.map(id => { const option = new Option(id, id); return option; }));
-        setStatus(models.length + ' model tersedia');
-      } catch (error) { $('model').innerHTML = '<option value="">Model tidak tersedia</option>'; setStatus('Gagal memuat model', true); $('modelState').title = error.message; }
+        const res = await fetch(`${CONFIG.baseUrl}/models`, {
+          headers: { 'Authorization': `Bearer ${CONFIG.apiKey}` }
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        const models = (data.data || []).map(m => m.id).filter(Boolean);
+
+        if (!models.length) throw new Error('Tidak ada model.');
+
+        state.models = models;
+        state.currentModel = models[0];
+
+        dom.modelSelect.innerHTML = models.map(id => `<option value="${id}">${id}</option>`).join('');
+        setStatus(`${models.length} model aktif`);
+      } catch (err) {
+        dom.modelSelect.innerHTML = '<option value="">Gagal memuat model</option>';
+        setStatus('Gagal memuat model', true);
+      }
     }
-    async function sendMessage(event) {
-      event.preventDefault(); const input = $('prompt'); const content = input.value.trim();
-      if (!content || !state.model || $('send').disabled) return;
-      input.value = ''; input.style.height = 'auto'; addMessage('user', content); $('send').disabled = true; typing(true); setStatus('Menunggu jawaban...');
+
+    function appendUserMessage(text) {
+      dom.welcomeCard.style.display = 'none';
+      state.messages.push({ role: 'user', content: text });
+
+      const row = document.createElement('div');
+      row.className = 'msg-row user';
+      row.innerHTML = `
+        <div class="msg-bubble">${escapeHtml(text)}</div>
+        <div class="msg-actions">
+          <span class="msg-meta">Kamu</span>
+        </div>
+      `;
+      dom.chatContainer.appendChild(row);
+      scrollToBottom();
+    }
+
+    function createAssistantBubble() {
+      dom.welcomeCard.style.display = 'none';
+      const row = document.createElement('div');
+      row.className = 'msg-row assistant';
+      row.innerHTML = `
+        <div class="msg-bubble"><span class="cursor-blink"></span></div>
+        <div class="msg-actions">
+          <span class="msg-meta">${escapeHtml(state.currentModel)}</span>
+          <button class="action-link" style="display:none;" onclick="copyMessageText(this)">Salin</button>
+        </div>
+      `;
+      dom.chatContainer.appendChild(row);
+      scrollToBottom();
+      return {
+        row,
+        bubble: row.querySelector('.msg-bubble'),
+        copyBtn: row.querySelector('.action-link')
+      };
+    }
+
+    window.copyMessageText = function(btn) {
+      const bubble = btn.closest('.msg-row').querySelector('.msg-bubble');
+      if (!bubble) return;
+      navigator.clipboard.writeText(bubble.innerText).then(() => {
+        btn.innerText = 'Tersalin';
+        setTimeout(() => { btn.innerText = 'Salin'; }, 1500);
+      });
+    };
+
+    function setGenerating(isGen) {
+      state.isGenerating = isGen;
+      if (isGen) {
+        dom.sendIcon.style.display = 'none';
+        dom.stopIcon.style.display = 'block';
+        dom.submitBtn.classList.add('stop');
+        dom.submitBtn.title = 'Hentikan';
+      } else {
+        dom.sendIcon.style.display = 'block';
+        dom.stopIcon.style.display = 'none';
+        dom.submitBtn.classList.remove('stop');
+        dom.submitBtn.title = 'Kirim';
+        dom.userInput.focus();
+      }
+    }
+
+    async function streamChatResponse() {
+      setGenerating(true);
+      state.abortController = new AbortController();
+      setStatus('Menghasilkan...');
+
+      const assistantMsg = createAssistantBubble();
+      let fullText = '';
+
       try {
-        const live = liveAssistant(); let answer = '';
-        answer = await streamChat(state.messages, text => { live.bubble.innerHTML = markdown(text); live.wrap.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); });
-        if (!answer) throw new Error('Respons router kosong'); state.messages.push({ role: 'assistant', content: answer }); addAssistantActions(live.wrap, answer); setStatus(state.messages.length / 2 + ' balasan');
-      } catch (error) { typing(false); addMessage('assistant', 'Tidak bisa mendapat jawaban.\n\n' + error.message); setStatus('Permintaan gagal', true); }
-      finally { typing(false); $('send').disabled = false; input.focus(); }
+        const response = await fetch(`${CONFIG.baseUrl}/chat/completions`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${CONFIG.apiKey}`,
+            'Content-Type': 'application/json',
+            'Accept': 'text/event-stream'
+          },
+          body: JSON.stringify({
+            model: state.currentModel,
+            messages: state.messages,
+            stream: true,
+            temperature: 0.7
+          }),
+          signal: state.abortController.signal
+        });
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(`Router error (${response.status}): ${errorText.slice(0, 100)}`);
+        }
+
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = '';
+
+        const processEvent = (eventStr) => {
+          const lines = eventStr.split(/\r?\n/);
+          for (const line of lines) {
+            if (!line.startsWith('data:')) continue;
+            const dataStr = line.slice(5).trim();
+            if (!dataStr || dataStr === '[DONE]') continue;
+            try {
+              const parsed = JSON.parse(dataStr);
+              const delta = parsed.choices?.[0]?.delta?.content;
+              if (typeof delta === 'string') {
+                fullText += delta;
+                assistantMsg.bubble.innerHTML = renderMarkdown(fullText) + '<span class="cursor-blink"></span>';
+                scrollToBottom();
+              }
+            } catch (e) {
+              // Non-fatal parse issue on chunk boundary
+            }
+          }
+        };
+
+        while (true) {
+          const { value, done } = await reader.read();
+          buffer += decoder.decode(value || new Uint8Array(), { stream: !done });
+          const parts = buffer.split(/\r?\n\r?\n/);
+          buffer = parts.pop() || '';
+          for (const part of parts) {
+            processEvent(part);
+          }
+          if (done) break;
+        }
+
+        if (buffer.trim()) processEvent(buffer);
+
+        if (!fullText.trim()) {
+          fullText = '(Tidak ada respons dari model)';
+        }
+
+        assistantMsg.bubble.innerHTML = renderMarkdown(fullText);
+        assistantMsg.copyBtn.style.display = 'inline-block';
+        state.messages.push({ role: 'assistant', content: fullText });
+        setStatus('Siap');
+
+      } catch (err) {
+        if (err.name === 'AbortError') {
+          assistantMsg.bubble.innerHTML = renderMarkdown(fullText || '(Dibatalkan)');
+          setStatus('Dibatalkan');
+        } else {
+          assistantMsg.bubble.innerHTML = `<span style="color: var(--danger);">Error: ${escapeHtml(err.message)}</span>`;
+          setStatus('Error', true);
+        }
+      } finally {
+        setGenerating(false);
+        state.abortController = null;
+        scrollToBottom();
+      }
     }
-    $('composer').addEventListener('submit', sendMessage);
-    $('model').addEventListener('change', event => { state.model = event.target.value; setStatus(state.model ? 'Model siap' : 'Pilih model'); });
-    $('prompt').addEventListener('input', event => { event.target.style.height = 'auto'; event.target.style.height = Math.min(event.target.scrollHeight, 140) + 'px'; });
-    $('prompt').addEventListener('keydown', event => { if (event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); $('composer').requestSubmit(); } });
-    $('clear').addEventListener('click', () => { state.messages = []; $('messages').innerHTML = ''; $('messages').append(Object.assign(document.createElement('div'), { id: 'welcome', className: 'welcome', innerHTML: '<div class="eyebrow">Percakapan baru</div><h2>Tulis apa yang ingin kamu pikirkan.</h2><p>Pilih model di bawah, lalu mulai dari pesan pertama.</p>' })); setStatus(state.model ? 'Percakapan dibersihkan' : 'Menghubungkan ke router...'); });
+
+    // Event Handlers
+    dom.chatForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (state.isGenerating) {
+        if (state.abortController) state.abortController.abort();
+        return;
+      }
+      const text = dom.userInput.value.trim();
+      if (!text || !state.currentModel) return;
+
+      dom.userInput.value = '';
+      dom.userInput.style.height = 'auto';
+      appendUserMessage(text);
+      streamChatResponse();
+    });
+
+    dom.userInput.addEventListener('input', () => {
+      dom.userInput.style.height = 'auto';
+      dom.userInput.style.height = Math.min(dom.userInput.scrollHeight, 120) + 'px';
+    });
+
+    dom.userInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        dom.chatForm.requestSubmit();
+      }
+    });
+
+    dom.modelSelect.addEventListener('change', (e) => {
+      state.currentModel = e.target.value;
+      setStatus(state.currentModel ? 'Model siap' : 'Pilih model');
+    });
+
+    dom.clearBtn.addEventListener('click', () => {
+      state.messages = [];
+      dom.chatContainer.innerHTML = '';
+      dom.chatContainer.appendChild(dom.welcomeCard);
+      dom.welcomeCard.style.display = 'flex';
+      setStatus('Percakapan dibersihkan');
+    });
+
+    // Init
     loadModels();
   </script>
 </body>
