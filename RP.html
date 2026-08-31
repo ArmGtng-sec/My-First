@@ -6,10 +6,10 @@
   <meta name="theme-color" content="#f6f1eb">
   <title>AI Roleplay & Story Reader</title>
 
-  <!-- Google Fonts -->
+  <!-- Google Fonts: Premium Book & Screen Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300;1,400&family=Plus+Jakarta+Sans:ital,wght@0,400..800;1,400..800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300;1,400&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -28,14 +28,14 @@
     };
   </script>
 
-  <!-- Marked.js CDN for Markdown Parsing -->
+  <!-- Marked.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
   <!-- Lucide Icons CDN -->
   <script src="https://unpkg.com/lucide@latest"></script>
 
   <style>
-    /* Theme Definitions */
+    /* Theme Systems */
     :root,
     [data-theme="sepia"] {
       --bg-base: #f6f1eb;
@@ -43,101 +43,104 @@
       --bg-surface: #efe8dc;
       --bg-surface-hover: #e5dcce;
       --border-color: #e2d7c7;
+      --border-focus: #8b5e3c;
       --text-main: #2c2523;
       --text-muted: #73645b;
       --text-subtle: #9c8b81;
       --accent: #8b5e3c;
       --accent-hover: #734c2f;
       --accent-light: rgba(139, 94, 60, 0.12);
-      --dialogue-color: #8b4513;
+      --dialogue-color: #964817;
       --dialogue-weight: 600;
       --narrative-color: #4a3e38;
-      --user-bubble: #ebdccb;
+      --user-bubble: #efe3d3;
       --user-text: #2c2523;
       --ai-bubble: #fbf7ee;
       --ai-text: #2c2523;
       --code-bg: #e6ded2;
-      --shadow-sm: 0 1px 2px rgba(44, 37, 35, 0.05);
-      --shadow-md: 0 4px 12px rgba(44, 37, 35, 0.08);
+      --shadow-soft: 0 4px 20px -2px rgba(44, 37, 35, 0.08);
+      --shadow-floating: 0 10px 30px -5px rgba(44, 37, 35, 0.12);
       --scrollbar-thumb: #d5c8b6;
     }
 
     [data-theme="midnight"] {
       --bg-base: #12151a;
-      --bg-paper: #161b22;
-      --bg-surface: #1a1f26;
-      --bg-surface-hover: #222933;
-      --border-color: #28303d;
+      --bg-paper: #171c24;
+      --bg-surface: #1e2430;
+      --bg-surface-hover: #262e3d;
+      --border-color: #2b3545;
+      --border-focus: #6366f1;
       --text-main: #d8dee9;
-      --text-muted: #8c97ab;
-      --text-subtle: #5f6b80;
+      --text-muted: #94a3b8;
+      --text-subtle: #64748b;
       --accent: #6366f1;
       --accent-hover: #4f46e5;
-      --accent-light: rgba(99, 102, 241, 0.15);
-      --dialogue-color: #818cf8;
+      --accent-light: rgba(99, 102, 241, 0.16);
+      --dialogue-color: #a5b4fc;
       --dialogue-weight: 600;
-      --narrative-color: #b0b9c9;
-      --user-bubble: #232b38;
-      --user-text: #e2e8f0;
-      --ai-bubble: #161b22;
+      --narrative-color: #cbd5e1;
+      --user-bubble: #222b3a;
+      --user-text: #f1f5f9;
+      --ai-bubble: #171c24;
       --ai-text: #d8dee9;
-      --code-bg: #0d1015;
-      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
-      --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.4);
-      --scrollbar-thumb: #2d3748;
+      --code-bg: #0f131a;
+      --shadow-soft: 0 4px 20px -2px rgba(0, 0, 0, 0.4);
+      --shadow-floating: 0 10px 30px -5px rgba(0, 0, 0, 0.6);
+      --scrollbar-thumb: #334155;
     }
 
     [data-theme="oled"] {
       --bg-base: #000000;
-      --bg-paper: #080808;
-      --bg-surface: #111111;
-      --bg-surface-hover: #1c1c1c;
-      --border-color: #222222;
-      --text-main: #e5e7eb;
-      --text-muted: #9ca3af;
-      --text-subtle: #6b7280;
+      --bg-paper: #09090b;
+      --bg-surface: #141417;
+      --bg-surface-hover: #1f1f23;
+      --border-color: #27272a;
+      --border-focus: #38bdf8;
+      --text-main: #f4f4f5;
+      --text-muted: #a1a1aa;
+      --text-subtle: #71717a;
       --accent: #38bdf8;
       --accent-hover: #0ea5e9;
-      --accent-light: rgba(56, 189, 248, 0.15);
-      --dialogue-color: #67e8f9;
+      --accent-light: rgba(56, 189, 248, 0.16);
+      --dialogue-color: #7dd3fc;
       --dialogue-weight: 600;
-      --narrative-color: #d1d5db;
+      --narrative-color: #e4e4e7;
       --user-bubble: #18181b;
-      --user-text: #f3f4f6;
-      --ai-bubble: #0a0a0a;
-      --ai-text: #e5e7eb;
-      --code-bg: #141414;
-      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.8);
-      --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.9);
+      --user-text: #ffffff;
+      --ai-bubble: #09090b;
+      --ai-text: #f4f4f5;
+      --code-bg: #18181b;
+      --shadow-soft: 0 4px 20px -2px rgba(0, 0, 0, 0.9);
+      --shadow-floating: 0 10px 30px -5px rgba(0, 0, 0, 0.95);
       --scrollbar-thumb: #27272a;
     }
 
     [data-theme="daylight"] {
-      --bg-base: #fafaf9;
+      --bg-base: #f8fafc;
       --bg-paper: #ffffff;
-      --bg-surface: #f5f5f4;
-      --bg-surface-hover: #eae8e5;
-      --border-color: #e7e5e4;
-      --text-main: #1c1917;
-      --text-muted: #78716c;
-      --text-subtle: #a8a29e;
+      --bg-surface: #f1f5f9;
+      --bg-surface-hover: #e2e8f0;
+      --border-color: #e2e8f0;
+      --border-focus: #2563eb;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --text-subtle: #94a3b8;
       --accent: #2563eb;
       --accent-hover: #1d4ed8;
-      --accent-light: rgba(37, 99, 235, 0.1);
+      --accent-light: rgba(37, 99, 235, 0.12);
       --dialogue-color: #1d4ed8;
       --dialogue-weight: 600;
-      --narrative-color: #44403c;
-      --user-bubble: #f1f5f9;
+      --narrative-color: #334155;
+      --user-bubble: #e2e8f0;
       --user-text: #0f172a;
       --ai-bubble: #ffffff;
-      --ai-text: #1c1917;
+      --ai-text: #0f172a;
       --code-bg: #f1f5f9;
-      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-      --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.07);
-      --scrollbar-thumb: #d6d3d1;
+      --shadow-soft: 0 4px 20px -2px rgba(15, 23, 42, 0.06);
+      --shadow-floating: 0 10px 30px -5px rgba(15, 23, 42, 0.1);
+      --scrollbar-thumb: #cbd5e1;
     }
 
-    /* Core Styles */
     * {
       box-sizing: border-box;
       -webkit-tap-highlight-color: transparent;
@@ -155,7 +158,15 @@
       transition: background-color 0.25s ease, color 0.25s ease;
     }
 
-    /* Custom Scrollbar */
+    /* Dynamic font switching on story body */
+    .font-mode-serif {
+      font-family: 'Lora', Georgia, serif !important;
+    }
+    .font-mode-sans {
+      font-family: 'Plus Jakarta Sans', Inter, system-ui, sans-serif !important;
+    }
+
+    /* Custom Smooth Scrollbar */
     ::-webkit-scrollbar {
       width: 6px;
       height: 6px;
@@ -165,108 +176,124 @@
     }
     ::-webkit-scrollbar-thumb {
       background: var(--scrollbar-thumb);
-      border-radius: 4px;
+      border-radius: 999px;
     }
 
-    /* Story Formatting Rules */
-    .story-content {
+    /* Reader Typography Engine */
+    .story-bubble-body {
       font-size: var(--story-font-size, 18px);
       line-height: var(--story-line-height, 1.8);
-      letter-spacing: 0.01em;
+      letter-spacing: 0.012em;
     }
 
-    /* Dialogue Styling: matches "dialogue" or 'dialogue' or “...” */
-    .story-content .rp-dialogue {
+    /* Roleplay Dialogue: "..." / “...” / 「...」 */
+    .story-bubble-body .rp-dialogue {
       color: var(--dialogue-color);
       font-weight: var(--dialogue-weight);
+      display: inline;
     }
 
-    /* Action / Narrative Styling (*action* -> em) */
-    .story-content em,
-    .story-content .rp-action {
+    /* Roleplay Actions / Narrative: *action* */
+    .story-bubble-body em,
+    .story-bubble-body .rp-action {
       color: var(--narrative-color);
       font-style: italic;
-      opacity: 0.92;
+      opacity: 0.95;
     }
 
-    .story-content p {
-      margin-bottom: 1.15em;
+    .story-bubble-body p {
+      margin-bottom: 1.25em;
     }
 
-    .story-content p:last-child {
+    .story-bubble-body p:last-child {
       margin-bottom: 0;
     }
 
-    .story-content blockquote {
+    .story-bubble-body blockquote {
       border-left: 3px solid var(--accent);
       padding-left: 1rem;
-      margin: 1rem 0;
+      margin: 1.2rem 0;
       color: var(--text-muted);
       font-style: italic;
     }
 
-    .story-content code {
+    .story-bubble-body code {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.88em;
+      font-size: 0.85em;
       background-color: var(--code-bg);
       padding: 0.15em 0.4em;
       border-radius: 4px;
     }
 
-    .story-content pre {
+    .story-bubble-body pre {
       background-color: var(--code-bg);
       padding: 1rem;
-      border-radius: 8px;
+      border-radius: 10px;
       overflow-x: auto;
-      margin: 1rem 0;
+      margin: 1.2rem 0;
     }
 
-    .story-content pre code {
+    .story-bubble-body pre code {
       background: transparent;
       padding: 0;
     }
 
-    /* Typing cursor effect */
+    /* Real-time Typing Cursor Effect */
     .typing-cursor::after {
       content: '●';
       display: inline-block;
-      margin-left: 4px;
+      margin-left: 5px;
       color: var(--accent);
-      font-size: 0.8em;
-      animation: pulse-dot 0.8s infinite alternate ease-in-out;
+      font-size: 0.75em;
+      vertical-align: middle;
+      animation: pulse-dot 0.75s infinite alternate cubic-bezier(0.4, 0, 0.6, 1);
     }
 
     @keyframes pulse-dot {
-      0% { opacity: 0.2; transform: scale(0.8); }
-      100% { opacity: 1; transform: scale(1.1); }
+      0% { opacity: 0.2; transform: scale(0.75); }
+      100% { opacity: 1; transform: scale(1.15); }
     }
 
-    /* Floating input adjustment */
+    /* Auto-expanding Input */
     .auto-grow-textarea {
-      max-height: 180px;
-      min-height: 46px;
+      max-height: 160px;
+      min-height: 44px;
       resize: none;
     }
 
-    /* Smooth Fade transitions */
-    .fade-in {
-      animation: fadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    /* Active UI Segment Buttons */
+    .btn-segmented-active {
+      border-color: var(--accent) !important;
+      background-color: var(--accent-light) !important;
+      color: var(--text-main) !important;
+      font-weight: 600 !important;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(4px); }
+    /* Smooth Micro-interactions */
+    .smooth-transition {
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .fade-enter {
+      animation: fadeEnter 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes fadeEnter {
+      from { opacity: 0; transform: translateY(6px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Immersive Mode Active */
+    /* Immersive Mode */
     body.immersive-mode #app-header,
     body.immersive-mode #app-sidebar,
-    body.immersive-mode #input-dock {
+    body.immersive-mode #input-dock,
+    body.immersive-mode #sidebar-backdrop {
       display: none !important;
     }
 
     body.immersive-mode #main-reader-container {
-      padding-bottom: 5rem;
+      padding-bottom: 6rem;
     }
 
     #immersive-exit-btn {
@@ -277,124 +304,126 @@
     }
   </style>
 </head>
-<body data-theme="sepia" class="font-serif select-text">
+<body data-theme="sepia" class="font-mode-serif select-text">
 
-  <!-- TOP HEADER -->
-  <header id="app-header" class="flex-shrink-0 h-14 border-b flex items-center justify-between px-3 md:px-6 transition-colors duration-200" style="background-color: var(--bg-paper); border-color: var(--border-color);">
-    <!-- Left: Sidebar Toggle & Active Scenario Title -->
-    <div class="flex items-center gap-2 md:gap-3 min-w-0">
-      <button id="btn-toggle-sidebar" class="p-2 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-colors text-inherit" title="Menu Cerita & Sesi (Alt+S)">
+  <!-- TOP APP HEADER -->
+  <header id="app-header" class="flex-shrink-0 h-14 border-b flex items-center justify-between px-3 md:px-6 transition-colors duration-200 z-20" style="background-color: var(--bg-paper); border-color: var(--border-color);">
+    
+    <!-- Left: Sidebar Toggle & Active Scenario Pill -->
+    <div class="flex items-center gap-2 md:gap-3.5 min-w-0">
+      <button id="btn-toggle-sidebar" class="p-2 rounded-xl hover:bg-black/5 dark:hover:bg-white/5 smooth-transition text-inherit flex items-center justify-center" title="Buka Daftar Skenario & Sesi">
         <i data-lucide="menu" class="w-5 h-5"></i>
       </button>
 
-      <div class="flex items-center gap-2 min-w-0 cursor-pointer group" id="header-persona-badge" title="Klik untuk edit persona & skenario">
-        <div id="header-avatar" class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold flex-shrink-0 shadow-sm" style="background-color: var(--accent-light); color: var(--accent);">
+      <div class="flex items-center gap-2.5 min-w-0 cursor-pointer group px-1.5 py-1 rounded-xl hover:bg-black/5 dark:hover:bg-white/5 smooth-transition" id="header-persona-badge" title="Klik untuk edit persona & skenario">
+        <div id="header-avatar" class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold flex-shrink-0 shadow-sm border" style="background-color: var(--bg-surface); border-color: var(--border-color);">
           🎭
         </div>
         <div class="min-w-0">
           <div class="flex items-center gap-1.5">
             <h1 id="header-story-title" class="font-bold text-sm md:text-base truncate tracking-tight">Kisah Baru</h1>
-            <span id="model-pill" class="hidden sm:inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium tracking-wide uppercase" style="background-color: var(--bg-surface); color: var(--text-muted); border: 1px solid var(--border-color);">
-              Auto Model
+            <span id="model-pill" class="hidden sm:inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-mono tracking-tight" style="background-color: var(--bg-surface); color: var(--text-muted); border: 1px solid var(--border-color);">
+              deepseek-v4-flash
             </span>
           </div>
-          <p id="header-char-subtitle" class="text-xs truncate" style="color: var(--text-muted);">AI Narrator & Roleplay</p>
+          <p id="header-char-subtitle" class="text-xs truncate font-sans" style="color: var(--text-muted);">AI Narrator</p>
         </div>
       </div>
     </div>
 
-    <!-- Right: Quick Theme, Reader Settings, Immersive Mode, Main Settings -->
+    <!-- Right: Theme Switcher, Typography Settings, Focus Mode, API Config -->
     <div class="flex items-center gap-1 sm:gap-1.5 flex-shrink-0">
-      <!-- Quick Theme Switcher -->
-      <button id="btn-theme-cycle" class="p-2 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-colors relative" title="Ganti Tema (Sepia / Midnight / OLED / Daylight)">
+      <!-- Quick Theme Cycle Button -->
+      <button id="btn-theme-cycle" class="p-2 rounded-xl hover:bg-black/5 dark:hover:bg-white/5 smooth-transition" title="Ganti Tema Cepat (Sepia / Midnight / OLED / Daylight)">
         <i data-lucide="sun" class="w-4 h-4 md:w-5 md:h-5"></i>
       </button>
 
-      <!-- Reading Appearance Toggle -->
-      <button id="btn-open-reader-settings" class="p-2 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-colors" title="Pengaturan Tampilan Baca">
+      <!-- Reader Typography Settings Button -->
+      <button id="btn-open-reader-settings" class="p-2 rounded-xl hover:bg-black/5 dark:hover:bg-white/5 smooth-transition" title="Pengaturan Tampilan & Tipografi Baca">
         <i data-lucide="type" class="w-4 h-4 md:w-5 md:h-5"></i>
       </button>
 
-      <!-- Immersive / Focus Mode -->
-      <button id="btn-enter-immersive" class="p-2 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-colors" title="Mode Fokus / Immersive (Bebas Distraksi)">
+      <!-- Immersive Focus Mode Button -->
+      <button id="btn-enter-immersive" class="p-2 rounded-xl hover:bg-black/5 dark:hover:bg-white/5 smooth-transition" title="Mode Fokus Membaca (Immersive)">
         <i data-lucide="maximize-2" class="w-4 h-4 md:w-5 md:h-5"></i>
       </button>
 
-      <!-- Main Config / Persona Settings -->
-      <button id="btn-open-settings" class="p-2 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-colors" title="Konfigurasi API & Model">
+      <!-- System API Config Button -->
+      <button id="btn-open-settings" class="p-2 rounded-xl hover:bg-black/5 dark:hover:bg-white/5 smooth-transition" title="Pengaturan API & Model">
         <i data-lucide="settings" class="w-4 h-4 md:w-5 md:h-5"></i>
       </button>
     </div>
   </header>
 
-  <!-- MAIN WRAPPER (SIDEBAR + STORY READER) -->
+  <!-- MAIN WORKSPACE (SIDEBAR + MAIN READER) -->
   <div class="flex-1 flex overflow-hidden relative">
 
     <!-- BACKDROP FOR MOBILE SIDEBAR -->
     <div id="sidebar-backdrop" class="fixed inset-0 bg-black/40 z-30 hidden md:hidden transition-opacity"></div>
 
     <!-- LEFT SIDEBAR -->
-    <aside id="app-sidebar" class="fixed md:relative z-40 w-72 md:w-80 h-full flex flex-col border-r transform -translate-x-full md:translate-x-0 transition-transform duration-200 ease-in-out shadow-lg md:shadow-none flex-shrink-0" style="background-color: var(--bg-paper); border-color: var(--border-color);">
+    <aside id="app-sidebar" class="fixed md:relative z-40 w-72 md:w-80 h-full flex flex-col border-r transform -translate-x-full md:translate-x-0 transition-transform duration-200 ease-out shadow-xl md:shadow-none flex-shrink-0" style="background-color: var(--bg-paper); border-color: var(--border-color);">
+      
       <!-- Sidebar Header -->
-      <div class="p-4 border-b flex items-center justify-between flex-shrink-0" style="border-color: var(--border-color);">
+      <div class="p-3.5 border-b flex items-center justify-between flex-shrink-0" style="border-color: var(--border-color);">
         <div class="flex items-center gap-2">
-          <i data-lucide="book-open" class="w-5 h-5" style="color: var(--accent);"></i>
-          <span class="font-bold text-sm tracking-wide">Daftar Skenario & Sesi</span>
+          <i data-lucide="book-marked" class="w-4 h-4" style="color: var(--accent);"></i>
+          <span class="font-bold text-xs tracking-wider uppercase opacity-80 font-sans">Koleksi Skenario</span>
         </div>
-        <button id="btn-close-sidebar" class="p-1 rounded md:hidden hover:bg-black/5 dark:hover:bg-white/5 text-inherit">
+        <button id="btn-close-sidebar" class="p-1 rounded-lg md:hidden hover:bg-black/5 dark:hover:bg-white/5 text-inherit">
           <i data-lucide="x" class="w-4 h-4"></i>
         </button>
       </div>
 
-      <!-- Action: New Story -->
-      <div class="p-3 border-b flex-shrink-0 flex gap-2" style="border-color: var(--border-color);">
-        <button id="btn-new-session" class="flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-sm font-semibold transition shadow-sm" style="background-color: var(--accent); color: #ffffff;">
+      <!-- Action Buttons: New Story & Persona Hub -->
+      <div class="p-3 border-b flex-shrink-0 flex gap-2 font-sans" style="border-color: var(--border-color);">
+        <button id="btn-new-session" class="flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-xl text-xs font-semibold shadow-sm smooth-transition hover:opacity-90 active:scale-95" style="background-color: var(--accent); color: #ffffff;">
           <i data-lucide="plus" class="w-4 h-4"></i>
           <span>Cerita Baru</span>
         </button>
-        <button id="btn-open-persona-modal" class="p-2 rounded-lg border flex items-center justify-center transition hover:bg-black/5 dark:hover:bg-white/5" style="border-color: var(--border-color);" title="Katalog Karakter & Skenario">
-          <i data-lucide="user-check" class="w-4 h-4"></i>
+        <button id="btn-open-persona-modal" class="p-2 rounded-xl border flex items-center justify-center smooth-transition hover:bg-black/5 dark:hover:bg-white/5" style="border-color: var(--border-color);" title="Katalog Persona & Skenario">
+          <i data-lucide="sparkles" class="w-4 h-4"></i>
         </button>
       </div>
 
-      <!-- Sessions List -->
-      <div id="sessions-list" class="flex-1 overflow-y-auto p-2 space-y-1.5">
-        <!-- Rendered by JS -->
+      <!-- Sessions List Scrollable -->
+      <div id="sessions-list" class="flex-1 overflow-y-auto p-2 space-y-1.5 font-sans">
+        <!-- Rendered by JavaScript -->
       </div>
 
-      <!-- Sidebar Footer (Export/Import & Status) -->
-      <div class="p-3 border-t text-xs flex flex-col gap-2 flex-shrink-0" style="border-color: var(--border-color); background-color: var(--bg-surface);">
+      <!-- Sidebar Footer Tools -->
+      <div class="p-3 border-t text-xs flex flex-col gap-2 flex-shrink-0 font-sans" style="border-color: var(--border-color); background-color: var(--bg-surface);">
         <div class="flex items-center justify-between">
-          <button id="btn-export-story" class="flex items-center gap-1.5 py-1 px-2 rounded hover:bg-black/5 dark:hover:bg-white/5 transition" title="Unduh naskah cerita saat ini">
-            <i data-lucide="file-text" class="w-3.5 h-3.5"></i>
-            <span>Export MD/TXT</span>
+          <button id="btn-export-story" class="flex items-center gap-1.5 py-1 px-2 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 smooth-transition" title="Ekspor cerita ke Markdown/TXT">
+            <i data-lucide="download" class="w-3.5 h-3.5"></i>
+            <span>Export Naskah</span>
           </button>
-          <button id="btn-backup-data" class="flex items-center gap-1.5 py-1 px-2 rounded hover:bg-black/5 dark:hover:bg-white/5 transition" title="Backup / Restore Semua Data">
+          <button id="btn-backup-data" class="flex items-center gap-1.5 py-1 px-2 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 smooth-transition" title="Backup / Restore Semua Data">
             <i data-lucide="database" class="w-3.5 h-3.5"></i>
             <span>Backup Data</span>
           </button>
         </div>
-        <div class="flex items-center justify-between text-[11px] pt-1 border-t" style="border-color: var(--border-color); color: var(--text-subtle);">
+        <div class="flex items-center justify-between text-[11px] pt-1.5 border-t" style="border-color: var(--border-color); color: var(--text-subtle);">
           <span>Router: <b class="font-mono text-[10px]" id="sidebar-router-label">juan.web.id</b></span>
-          <span id="api-status-indicator" class="flex items-center gap-1">
-            <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Siap
+          <span id="api-status-indicator" class="flex items-center gap-1 font-medium text-emerald-600 dark:text-emerald-400">
+            <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Aktif
           </span>
         </div>
       </div>
     </aside>
 
     <!-- CENTER READER VIEWPORT -->
-    <main id="main-reader-container" class="flex-1 flex flex-col h-full overflow-y-auto relative transition-all duration-150">
+    <main id="main-reader-container" class="flex-1 flex flex-col h-full overflow-y-auto relative smooth-transition">
       
-      <!-- Content Container with Dynamic Width -->
-      <div id="story-reader-width-wrapper" class="w-full max-w-3xl mx-auto px-4 sm:px-6 md:px-8 py-6 md:py-10 flex-1 flex flex-col justify-between">
+      <!-- Width Wrapper for Eye Comfort -->
+      <div id="story-reader-width-wrapper" class="w-full max-w-3xl mx-auto px-4 sm:px-6 md:px-8 py-6 md:py-8 flex-1 flex flex-col justify-between">
         
         <!-- Story Log Messages -->
-        <div id="story-stream-container" class="space-y-6 md:space-y-8 flex-1">
+        <div id="story-stream-container" class="space-y-6 md:space-y-7 flex-1">
           <!-- Rendered messages will go here -->
         </div>
 
-        <!-- Spacer for floating dock -->
+        <!-- Bottom Spacer for floating input -->
         <div class="h-28 md:h-32 flex-shrink-0"></div>
       </div>
 
@@ -402,55 +431,55 @@
 
   </div>
 
-  <!-- FLOATING BOTTOM INPUT DOCK -->
+  <!-- FLOATING BOTTOM DOCK (QUICK ACTIONS & INPUT) -->
   <div id="input-dock" class="fixed bottom-0 left-0 right-0 z-20 pointer-events-none transition-all duration-200">
     <div class="max-w-3xl mx-auto px-3 sm:px-6 pb-3 pt-2 pointer-events-auto">
       
-      <!-- Quick Story Actions Bar -->
+      <!-- Quick Story Actions Pills -->
       <div id="quick-actions-bar" class="flex items-center gap-1.5 sm:gap-2 mb-2 overflow-x-auto py-1 no-scrollbar text-xs font-sans">
-        <button id="btn-quick-continue" class="flex items-center gap-1 px-3 py-1.5 rounded-full border shadow-sm transition hover:scale-[1.02] active:scale-95 flex-shrink-0" style="background-color: var(--bg-paper); border-color: var(--border-color); color: var(--accent);">
+        <button id="btn-quick-continue" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full border shadow-sm smooth-transition hover:opacity-90 active:scale-95 flex-shrink-0" style="background-color: var(--bg-paper); border-color: var(--border-color); color: var(--accent);">
           <i data-lucide="play" class="w-3 h-3 fill-current"></i>
-          <span class="font-medium">Lanjutkan Cerita</span>
+          <span class="font-semibold">Lanjutkan Cerita</span>
         </button>
 
-        <button id="btn-quick-regen" class="flex items-center gap-1 px-2.5 py-1.5 rounded-full border shadow-sm transition hover:bg-black/5 dark:hover:bg-white/5 flex-shrink-0" style="background-color: var(--bg-paper); border-color: var(--border-color); color: var(--text-muted);" title="Ulangi Respon Terakhir">
+        <button id="btn-quick-regen" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full border shadow-sm smooth-transition hover:bg-black/5 dark:hover:bg-white/5 flex-shrink-0" style="background-color: var(--bg-paper); border-color: var(--border-color); color: var(--text-muted);" title="Ulangi Respon Terakhir">
           <i data-lucide="refresh-cw" class="w-3 h-3"></i>
           <span>Regenerate</span>
         </button>
 
-        <button id="btn-quick-undo" class="flex items-center gap-1 px-2.5 py-1.5 rounded-full border shadow-sm transition hover:bg-black/5 dark:hover:bg-white/5 flex-shrink-0" style="background-color: var(--bg-paper); border-color: var(--border-color); color: var(--text-muted);" title="Hapus giliran terakhir">
+        <button id="btn-quick-undo" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full border shadow-sm smooth-transition hover:bg-black/5 dark:hover:bg-white/5 flex-shrink-0" style="background-color: var(--bg-paper); border-color: var(--border-color); color: var(--text-muted);" title="Hapus giliran terakhir">
           <i data-lucide="undo-2" class="w-3 h-3"></i>
           <span>Undo Turn</span>
         </button>
 
         <div class="flex-1"></div>
 
-        <button id="btn-scroll-bottom" class="p-1.5 rounded-full border shadow-sm transition hover:bg-black/5 dark:hover:bg-white/5 flex-shrink-0" style="background-color: var(--bg-paper); border-color: var(--border-color); color: var(--text-muted);" title="Scroll ke bawah">
+        <button id="btn-scroll-bottom" class="p-1.5 rounded-full border shadow-sm smooth-transition hover:bg-black/5 dark:hover:bg-white/5 flex-shrink-0" style="background-color: var(--bg-paper); border-color: var(--border-color); color: var(--text-muted);" title="Scroll ke paling bawah">
           <i data-lucide="arrow-down" class="w-3.5 h-3.5"></i>
         </button>
       </div>
 
-      <!-- Main Input Box -->
-      <div class="relative rounded-2xl border shadow-md flex items-end p-1.5 sm:p-2 gap-2 transition-all duration-150" style="background-color: var(--bg-paper); border-color: var(--border-color);">
+      <!-- Main Input Bar Box -->
+      <div class="relative rounded-2xl border shadow-lg flex items-end p-1.5 sm:p-2 gap-2 smooth-transition" style="background-color: var(--bg-paper); border-color: var(--border-color);">
         <textarea
           id="story-input"
           rows="1"
-          placeholder="Tulis tindakan atau ucapan karaktermu... (contoh: *Melangkah mendekat ke jendela* &quot;Siapa di sana?&quot;)"
+          placeholder="Tulis dialog atau tindakan... (contoh: *Menatap langit malam* &quot;Apa rencanamu selanjutnya?&quot;)"
           class="auto-grow-textarea flex-1 bg-transparent border-0 outline-none p-2 text-sm sm:text-base font-sans text-inherit placeholder:opacity-50 overflow-y-auto"
         ></textarea>
 
-        <!-- Send / Stop Button -->
+        <!-- Send & Stop Button -->
         <div class="flex items-center gap-1 flex-shrink-0 pb-0.5">
-          <button id="btn-send-message" class="w-10 h-10 rounded-xl flex items-center justify-center transition shadow-sm font-semibold active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed" style="background-color: var(--accent); color: #ffffff;">
+          <button id="btn-send-message" class="w-10 h-10 rounded-xl flex items-center justify-center smooth-transition shadow-sm active:scale-95 disabled:opacity-40" style="background-color: var(--accent); color: #ffffff;">
             <i data-lucide="send" class="w-4 h-4"></i>
           </button>
-          <button id="btn-stop-streaming" class="w-10 h-10 rounded-xl hidden items-center justify-center transition shadow-sm bg-rose-600 hover:bg-rose-700 text-white active:scale-95">
+          <button id="btn-stop-streaming" class="w-10 h-10 rounded-xl hidden items-center justify-center smooth-transition shadow-sm bg-rose-600 hover:bg-rose-700 text-white active:scale-95">
             <i data-lucide="square" class="w-4 h-4 fill-current"></i>
           </button>
         </div>
       </div>
 
-      <div class="flex items-center justify-between px-2 pt-1 text-[11px] font-sans" style="color: var(--text-subtle);">
+      <div class="flex items-center justify-between px-2 pt-1.5 text-[11px] font-sans" style="color: var(--text-subtle);">
         <span><kbd class="font-mono text-[10px] px-1 py-0.5 rounded border" style="border-color: var(--border-color);">Enter</kbd> kirim &bull; <kbd class="font-mono text-[10px] px-1 py-0.5 rounded border" style="border-color: var(--border-color);">Shift+Enter</kbd> baris baru</span>
         <span id="char-counter" class="font-mono">0 karakter</span>
       </div>
@@ -458,101 +487,103 @@
     </div>
   </div>
 
-  <!-- FLOATING EXIT BUTTON FOR IMMERSIVE MODE -->
-  <button id="immersive-exit-btn" class="fixed top-4 right-4 z-50 p-2.5 rounded-full shadow-lg border items-center justify-center transition-transform hover:scale-105 active:scale-95" style="background-color: var(--bg-paper); border-color: var(--border-color); color: var(--text-main);" title="Keluar Mode Immersive (Esc)">
+  <!-- FLOATING EXIT BUTTON FOR IMMERSIVE FOCUS MODE -->
+  <button id="immersive-exit-btn" class="fixed top-4 right-4 z-50 p-2.5 rounded-full shadow-2xl border items-center justify-center smooth-transition hover:scale-105 active:scale-95" style="background-color: var(--bg-paper); border-color: var(--border-color); color: var(--text-main);" title="Keluar Mode Immersive (Esc)">
     <i data-lucide="minimize-2" class="w-5 h-5"></i>
   </button>
 
   <!-- ==================== MODALS & DRAWERS ==================== -->
 
-  <!-- 1. READING SETTINGS MODAL -->
+  <!-- 1. READING & TYPOGRAPHY SETTINGS MODAL -->
   <div id="modal-reader-settings" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm hidden items-center justify-center p-4">
-    <div class="w-full max-w-md rounded-2xl p-5 sm:p-6 shadow-2xl border fade-in" style="background-color: var(--bg-paper); border-color: var(--border-color); color: var(--text-main);">
-      <div class="flex items-center justify-between pb-4 border-b" style="border-color: var(--border-color);">
+    <div class="w-full max-w-md rounded-2xl p-5 sm:p-6 shadow-2xl border fade-enter max-h-[90vh] overflow-y-auto" style="background-color: var(--bg-paper); border-color: var(--border-color); color: var(--text-main);">
+      
+      <div class="flex items-center justify-between pb-3.5 border-b" style="border-color: var(--border-color);">
         <div class="flex items-center gap-2">
           <i data-lucide="sliders" class="w-5 h-5" style="color: var(--accent);"></i>
-          <h2 class="font-bold text-base">Kenyamanan & Tampilan Baca</h2>
+          <h2 class="font-bold text-base font-sans">Kenyamanan & Tampilan Baca</h2>
         </div>
         <button class="btn-close-modal p-1.5 rounded-lg hover:bg-black/5 dark:hover:bg-white/5">
           <i data-lucide="x" class="w-4 h-4"></i>
         </button>
       </div>
 
-      <div class="py-4 space-y-4 text-sm font-sans">
+      <div class="py-4 space-y-4 font-sans text-sm">
+        
         <!-- Theme Selection Grid -->
         <div>
           <label class="block text-xs font-semibold mb-2" style="color: var(--text-muted);">TEMA WARNA</label>
           <div class="grid grid-cols-2 gap-2">
-            <button data-set-theme="sepia" class="theme-choice-btn flex items-center gap-2 p-2.5 rounded-xl border text-left transition font-medium bg-[#f6f1eb] text-[#2c2523] border-[#e2d7c7]">
-              <span class="w-4 h-4 rounded-full bg-[#8b5e3c]"></span>
-              <span>Sepia Paper</span>
+            <button type="button" data-set-theme="sepia" class="theme-choice-btn flex items-center gap-2.5 p-2.5 rounded-xl border text-left smooth-transition font-medium bg-[#f6f1eb] text-[#2c2523] border-[#e2d7c7]">
+              <span class="w-4 h-4 rounded-full bg-[#8b5e3c] flex-shrink-0 shadow-inner"></span>
+              <span class="text-xs">Sepia Paper</span>
             </button>
-            <button data-set-theme="midnight" class="theme-choice-btn flex items-center gap-2 p-2.5 rounded-xl border text-left transition font-medium bg-[#12151a] text-[#d8dee9] border-[#28303d]">
-              <span class="w-4 h-4 rounded-full bg-[#6366f1]"></span>
-              <span>Soft Midnight</span>
+            <button type="button" data-set-theme="midnight" class="theme-choice-btn flex items-center gap-2.5 p-2.5 rounded-xl border text-left smooth-transition font-medium bg-[#12151a] text-[#d8dee9] border-[#2b3545]">
+              <span class="w-4 h-4 rounded-full bg-[#6366f1] flex-shrink-0 shadow-inner"></span>
+              <span class="text-xs">Soft Midnight</span>
             </button>
-            <button data-set-theme="oled" class="theme-choice-btn flex items-center gap-2 p-2.5 rounded-xl border text-left transition font-medium bg-[#000000] text-[#e5e7eb] border-[#222222]">
-              <span class="w-4 h-4 rounded-full bg-[#38bdf8]"></span>
-              <span>OLED Pure Black</span>
+            <button type="button" data-set-theme="oled" class="theme-choice-btn flex items-center gap-2.5 p-2.5 rounded-xl border text-left smooth-transition font-medium bg-[#000000] text-[#f4f4f5] border-[#27272a]">
+              <span class="w-4 h-4 rounded-full bg-[#38bdf8] flex-shrink-0 shadow-inner"></span>
+              <span class="text-xs">OLED Pure Black</span>
             </button>
-            <button data-set-theme="daylight" class="theme-choice-btn flex items-center gap-2 p-2.5 rounded-xl border text-left transition font-medium bg-[#fafaf9] text-[#1c1917] border-[#e7e5e4]">
-              <span class="w-4 h-4 rounded-full bg-[#2563eb]"></span>
-              <span>Soft Daylight</span>
+            <button type="button" data-set-theme="daylight" class="theme-choice-btn flex items-center gap-2.5 p-2.5 rounded-xl border text-left smooth-transition font-medium bg-[#f8fafc] text-[#0f172a] border-[#e2e8f0]">
+              <span class="w-4 h-4 rounded-full bg-[#2563eb] flex-shrink-0 shadow-inner"></span>
+              <span class="text-xs">Soft Daylight</span>
             </button>
           </div>
         </div>
 
-        <!-- Typography Family -->
+        <!-- Typography Family Toggle -->
         <div>
-          <label class="block text-xs font-semibold mb-2" style="color: var(--text-muted);">JENIS FONT</label>
+          <label class="block text-xs font-semibold mb-2" style="color: var(--text-muted);">JENIS FONT BACAAN</label>
           <div class="grid grid-cols-2 gap-2">
-            <button id="font-choice-serif" class="p-2.5 rounded-xl border text-center transition font-serif font-semibold border-current" style="border-color: var(--accent); background-color: var(--accent-light);">
+            <button type="button" id="font-choice-serif" data-font="serif" class="font-toggle-btn p-2.5 rounded-xl border text-center smooth-transition font-serif font-semibold text-xs" style="border-color: var(--border-color);">
               Serif (Novel / Lora)
             </button>
-            <button id="font-choice-sans" class="p-2.5 rounded-xl border text-center transition font-sans font-medium" style="border-color: var(--border-color);">
+            <button type="button" id="font-choice-sans" data-font="sans" class="font-toggle-btn p-2.5 rounded-xl border text-center smooth-transition font-sans font-medium text-xs" style="border-color: var(--border-color);">
               Sans (Modern / Jakarta)
             </button>
           </div>
         </div>
 
-        <!-- Font Size Slider / Buttons -->
+        <!-- Font Size Slider & Fast Steppers -->
         <div>
           <div class="flex items-center justify-between mb-2">
             <label class="text-xs font-semibold" style="color: var(--text-muted);">UKURAN TEKS</label>
-            <span id="font-size-label" class="font-mono text-xs font-semibold">18px</span>
+            <span id="font-size-label" class="font-mono text-xs font-bold px-2 py-0.5 rounded" style="background-color: var(--bg-surface);">18px</span>
           </div>
-          <div class="flex items-center gap-3">
-            <span class="text-xs">A-</span>
-            <input id="range-font-size" type="range" min="14" max="24" step="1" value="18" class="flex-1 accent-amber-700 cursor-pointer">
-            <span class="text-base font-bold">A+</span>
+          <div class="flex items-center gap-2.5">
+            <button type="button" id="btn-font-dec" class="px-2.5 py-1 rounded-lg border text-xs font-bold smooth-transition hover:bg-black/5 dark:hover:bg-white/5" style="border-color: var(--border-color);">A-</button>
+            <input id="range-font-size" type="range" min="14" max="24" step="1" value="18" class="flex-1 accent-amber-700 cursor-pointer h-2 rounded-lg bg-black/10 dark:bg-white/10">
+            <button type="button" id="btn-font-inc" class="px-2.5 py-1 rounded-lg border text-xs font-bold smooth-transition hover:bg-black/5 dark:hover:bg-white/5" style="border-color: var(--border-color);">A+</button>
           </div>
         </div>
 
-        <!-- Line Spacing -->
+        <!-- Line Spacing (Line Height) -->
         <div>
-          <label class="block text-xs font-semibold mb-2" style="color: var(--text-muted);">JARAK SPASI BARIS (LINE HEIGHT)</label>
+          <label class="block text-xs font-semibold mb-2" style="color: var(--text-muted);">JARAK BARIS (LINE HEIGHT)</label>
           <div class="grid grid-cols-3 gap-2 text-center text-xs">
-            <button data-line-height="1.5" class="lh-btn p-2 rounded-lg border font-medium">Rapat (1.5)</button>
-            <button data-line-height="1.8" class="lh-btn p-2 rounded-lg border font-medium border-current" style="border-color: var(--accent); background-color: var(--accent-light);">Nyaman (1.8)</button>
-            <button data-line-height="2.1" class="lh-btn p-2 rounded-lg border font-medium">Longgar (2.1)</button>
+            <button type="button" data-line-height="1.5" class="lh-btn p-2 rounded-xl border font-medium smooth-transition" style="border-color: var(--border-color);">Rapat (1.5)</button>
+            <button type="button" data-line-height="1.8" class="lh-btn p-2 rounded-xl border font-medium smooth-transition" style="border-color: var(--border-color);">Nyaman (1.8)</button>
+            <button type="button" data-line-height="2.1" class="lh-btn p-2 rounded-xl border font-medium smooth-transition" style="border-color: var(--border-color);">Longgar (2.1)</button>
           </div>
         </div>
 
-        <!-- Reading Width Container -->
+        <!-- Reading Column Width Container -->
         <div>
           <label class="block text-xs font-semibold mb-2" style="color: var(--text-muted);">LEBAR KOLOM BACAAN</label>
           <div class="grid grid-cols-3 gap-2 text-center text-xs">
-            <button data-reader-width="max-w-2xl" class="width-btn p-2 rounded-lg border font-medium">Fokus (670px)</button>
-            <button data-reader-width="max-w-3xl" class="width-btn p-2 rounded-lg border font-medium border-current" style="border-color: var(--accent); background-color: var(--accent-light);">Ideal (768px)</button>
-            <button data-reader-width="max-w-4xl" class="width-btn p-2 rounded-lg border font-medium">Lebar (896px)</button>
+            <button type="button" data-reader-width="max-w-2xl" class="width-btn p-2 rounded-xl border font-medium smooth-transition" style="border-color: var(--border-color);">Fokus (670px)</button>
+            <button type="button" data-reader-width="max-w-3xl" class="width-btn p-2 rounded-xl border font-medium smooth-transition" style="border-color: var(--border-color);">Ideal (768px)</button>
+            <button type="button" data-reader-width="max-w-4xl" class="width-btn p-2 rounded-xl border font-medium smooth-transition" style="border-color: var(--border-color);">Lebar (896px)</button>
           </div>
         </div>
 
       </div>
 
-      <div class="pt-3 border-t flex justify-end" style="border-color: var(--border-color);">
-        <button class="btn-close-modal px-4 py-2 rounded-xl text-sm font-semibold" style="background-color: var(--accent); color: #ffffff;">
-          Terapkan & Tutup
+      <div class="pt-3 border-t flex justify-end font-sans" style="border-color: var(--border-color);">
+        <button type="button" class="btn-close-modal px-4 py-2 rounded-xl text-xs font-semibold shadow-sm" style="background-color: var(--accent); color: #ffffff;">
+          Tutup
         </button>
       </div>
     </div>
@@ -560,11 +591,12 @@
 
   <!-- 2. API & SYSTEM CONFIG MODAL -->
   <div id="modal-settings" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm hidden items-center justify-center p-4">
-    <div class="w-full max-w-lg rounded-2xl p-5 sm:p-6 shadow-2xl border fade-in max-h-[90vh] overflow-y-auto" style="background-color: var(--bg-paper); border-color: var(--border-color); color: var(--text-main);">
-      <div class="flex items-center justify-between pb-4 border-b" style="border-color: var(--border-color);">
+    <div class="w-full max-w-lg rounded-2xl p-5 sm:p-6 shadow-2xl border fade-enter max-h-[90vh] overflow-y-auto" style="background-color: var(--bg-paper); border-color: var(--border-color); color: var(--text-main);">
+      
+      <div class="flex items-center justify-between pb-3.5 border-b" style="border-color: var(--border-color);">
         <div class="flex items-center gap-2">
           <i data-lucide="settings-2" class="w-5 h-5" style="color: var(--accent);"></i>
-          <h2 class="font-bold text-base">Konfigurasi API & Router</h2>
+          <h2 class="font-bold text-base font-sans">Konfigurasi Router & Model AI</h2>
         </div>
         <button class="btn-close-modal p-1.5 rounded-lg hover:bg-black/5 dark:hover:bg-white/5">
           <i data-lucide="x" class="w-4 h-4"></i>
@@ -572,6 +604,7 @@
       </div>
 
       <form id="form-api-settings" class="py-4 space-y-4 text-sm font-sans">
+        
         <!-- Base URL -->
         <div>
           <label class="block text-xs font-semibold mb-1" style="color: var(--text-muted);">API BASE URL</label>
@@ -580,7 +613,7 @@
 
         <!-- API Key -->
         <div>
-          <label class="block text-xs font-semibold mb-1" style="color: var(--text-muted);">API KEY (Tersimpan aman di LocalStorage)</label>
+          <label class="block text-xs font-semibold mb-1" style="color: var(--text-muted);">API KEY (Tersimpan di LocalStorage)</label>
           <div class="relative">
             <input id="input-api-key" type="password" placeholder="sk-..." class="w-full px-3 py-2 rounded-xl border outline-none font-mono text-xs focus:ring-2 focus:ring-amber-500/20 pr-10" style="background-color: var(--bg-surface); border-color: var(--border-color); color: var(--text-main);">
             <button type="button" id="btn-toggle-key-visibility" class="absolute right-2 top-2 text-inherit opacity-60 hover:opacity-100 p-1">
@@ -599,7 +632,7 @@
           </div>
           <div class="relative">
             <select id="select-model" class="w-full px-3 py-2 rounded-xl border outline-none text-xs font-mono appearance-none" style="background-color: var(--bg-surface); border-color: var(--border-color); color: var(--text-main);">
-              <option value="gpt-4o-mini">Memuat daftar model...</option>
+              <option value="deepseek-v4-flash">deepseek-v4-flash</option>
             </select>
             <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 opacity-60">
               <i data-lucide="chevron-down" class="w-4 h-4"></i>
@@ -608,15 +641,15 @@
           <p id="model-fetch-status" class="text-[11px] mt-1" style="color: var(--text-subtle);"></p>
         </div>
 
-        <!-- Temperature & Creativity -->
+        <!-- Temperature -->
         <div>
           <div class="flex items-center justify-between mb-1">
             <label class="text-xs font-semibold" style="color: var(--text-muted);">KREATIVITAS (TEMPERATURE)</label>
             <span id="label-temperature" class="font-mono text-xs font-bold">0.85</span>
           </div>
           <input id="input-temperature" type="range" min="0.2" max="1.5" step="0.05" value="0.85" class="w-full accent-amber-700 cursor-pointer">
-          <div class="flex justify-between text-[10px] text-gray-500">
-            <span>Fokus / Konsisten (0.2)</span>
+          <div class="flex justify-between text-[10px] text-gray-500 pt-1">
+            <span>Konsisten (0.2)</span>
             <span>Seimbang (0.85)</span>
             <span>Sangat Kreatif (1.5)</span>
           </div>
@@ -627,7 +660,7 @@
             Batal
           </button>
           <button type="submit" class="px-5 py-2 rounded-xl text-xs font-semibold shadow-sm" style="background-color: var(--accent); color: #ffffff;">
-            Simpan Konfigurasi
+            Simpan Pengaturan
           </button>
         </div>
       </form>
@@ -636,11 +669,12 @@
 
   <!-- 3. PERSONA & SCENARIO HUB MODAL -->
   <div id="modal-persona-hub" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm hidden items-center justify-center p-4">
-    <div class="w-full max-w-2xl rounded-2xl p-5 sm:p-6 shadow-2xl border fade-in max-h-[90vh] overflow-y-auto flex flex-col" style="background-color: var(--bg-paper); border-color: var(--border-color); color: var(--text-main);">
-      <div class="flex items-center justify-between pb-4 border-b flex-shrink-0" style="border-color: var(--border-color);">
+    <div class="w-full max-w-2xl rounded-2xl p-5 sm:p-6 shadow-2xl border fade-enter max-h-[90vh] overflow-y-auto flex flex-col" style="background-color: var(--bg-paper); border-color: var(--border-color); color: var(--text-main);">
+      
+      <div class="flex items-center justify-between pb-3.5 border-b flex-shrink-0" style="border-color: var(--border-color);">
         <div class="flex items-center gap-2">
           <i data-lucide="sparkles" class="w-5 h-5" style="color: var(--accent);"></i>
-          <h2 class="font-bold text-base">Karakter & Skenario Roleplay</h2>
+          <h2 class="font-bold text-base font-sans">Karakter & Skenario Roleplay</h2>
         </div>
         <button class="btn-close-modal p-1.5 rounded-lg hover:bg-black/5 dark:hover:bg-white/5">
           <i data-lucide="x" class="w-4 h-4"></i>
@@ -651,24 +685,24 @@
       <div class="py-3 border-b flex-shrink-0 font-sans" style="border-color: var(--border-color);">
         <label class="block text-xs font-semibold mb-2" style="color: var(--text-muted);">TEMPLAT SKENARIO POPULER</label>
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
-          <button type="button" data-preset="fantasy" class="preset-card-btn p-2 rounded-xl border text-left hover:scale-[1.02] transition" style="background-color: var(--bg-surface); border-color: var(--border-color);">
-            <div class="text-base mb-1">🧙‍♂️</div>
+          <button type="button" data-preset="fantasy" class="preset-card-btn p-2.5 rounded-xl border text-left smooth-transition hover:scale-[1.02]" style="background-color: var(--bg-surface); border-color: var(--border-color);">
+            <div class="text-lg mb-1">🧙‍♂️</div>
             <div class="font-bold text-xs">Fantasy RPG</div>
             <div class="text-[10px] opacity-70 truncate">Petualangan Medieval</div>
           </button>
-          <button type="button" data-preset="cyberpunk" class="preset-card-btn p-2 rounded-xl border text-left hover:scale-[1.02] transition" style="background-color: var(--bg-surface); border-color: var(--border-color);">
-            <div class="text-base mb-1">🌃</div>
+          <button type="button" data-preset="cyberpunk" class="preset-card-btn p-2.5 rounded-xl border text-left smooth-transition hover:scale-[1.02]" style="background-color: var(--bg-surface); border-color: var(--border-color);">
+            <div class="text-lg mb-1">🌃</div>
             <div class="font-bold text-xs">Cyberpunk 2099</div>
-            <div class="text-[10px] opacity-70 truncate">Detektif Neo-City</div>
+            <div class="text-[10px] opacity-70 truncate">Noir Megacity</div>
           </button>
-          <button type="button" data-preset="mystery" class="preset-card-btn p-2 rounded-xl border text-left hover:scale-[1.02] transition" style="background-color: var(--bg-surface); border-color: var(--border-color);">
-            <div class="text-base mb-1">🔍</div>
+          <button type="button" data-preset="mystery" class="preset-card-btn p-2.5 rounded-xl border text-left smooth-transition hover:scale-[1.02]" style="background-color: var(--bg-surface); border-color: var(--border-color);">
+            <div class="text-lg mb-1">🔍</div>
             <div class="font-bold text-xs">Victorian Mystery</div>
-            <div class="text-[10px] opacity-70 truncate">Teka-teki Detektif</div>
+            <div class="text-[10px] opacity-70 truncate">Kasus Detektif 1892</div>
           </button>
-          <button type="button" data-preset="romance" class="preset-card-btn p-2 rounded-xl border text-left hover:scale-[1.02] transition" style="background-color: var(--bg-surface); border-color: var(--border-color);">
-            <div class="text-base mb-1">☕</div>
-            <div class="font-bold text-xs">Cozy Cafe Romance</div>
+          <button type="button" data-preset="romance" class="preset-card-btn p-2.5 rounded-xl border text-left smooth-transition hover:scale-[1.02]" style="background-color: var(--bg-surface); border-color: var(--border-color);">
+            <div class="text-lg mb-1">☕</div>
+            <div class="font-bold text-xs">Cozy Cafe</div>
             <div class="text-[10px] opacity-70 truncate">Slice of Life</div>
           </button>
         </div>
@@ -699,7 +733,7 @@
         </div>
 
         <div>
-          <label class="block text-xs font-semibold mb-1" style="color: var(--text-muted);">SYSTEM PROMPT (DUNIA, KARAKTER & ATURAN ROLEPLAY)</label>
+          <label class="block text-xs font-semibold mb-1" style="color: var(--text-muted);">SYSTEM PROMPT (DUNIA & ATURAN ROLEPLAY)</label>
           <textarea id="input-persona-system" rows="4" placeholder="Jelaskan peran AI, gaya penulisan novel imersif, deskripsi latar, dan aturan..." class="w-full px-3 py-2 rounded-xl border outline-none text-xs font-mono" style="background-color: var(--bg-surface); border-color: var(--border-color); color: var(--text-main);" required></textarea>
         </div>
 
@@ -713,7 +747,7 @@
             Batal
           </button>
           <button type="submit" class="px-5 py-2 rounded-xl text-xs font-semibold shadow-sm" style="background-color: var(--accent); color: #ffffff;">
-            Terapkan ke Cerita
+            Terapkan Skenario
           </button>
         </div>
       </form>
@@ -722,11 +756,12 @@
 
   <!-- 4. EDIT MESSAGE MODAL -->
   <div id="modal-edit-msg" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm hidden items-center justify-center p-4">
-    <div class="w-full max-w-lg rounded-2xl p-5 sm:p-6 shadow-2xl border fade-in" style="background-color: var(--bg-paper); border-color: var(--border-color); color: var(--text-main);">
+    <div class="w-full max-w-lg rounded-2xl p-5 sm:p-6 shadow-2xl border fade-enter" style="background-color: var(--bg-paper); border-color: var(--border-color); color: var(--text-main);">
+      
       <div class="flex items-center justify-between pb-3 border-b" style="border-color: var(--border-color);">
         <div class="flex items-center gap-2">
           <i data-lucide="edit-3" class="w-5 h-5" style="color: var(--accent);"></i>
-          <h2 class="font-bold text-base">Edit & Ubah Arah Cerita</h2>
+          <h2 class="font-bold text-base font-sans">Edit Pesan Cerita</h2>
         </div>
         <button class="btn-close-modal p-1.5 rounded-lg hover:bg-black/5 dark:hover:bg-white/5">
           <i data-lucide="x" class="w-4 h-4"></i>
@@ -735,17 +770,17 @@
 
       <div class="py-4 text-sm font-sans space-y-3">
         <p class="text-xs" style="color: var(--text-muted);">
-          Mengubah prompt ini akan memperbarui jalan cerita dari titik ini dan meminta AI melanjutkan kembali.
+          Mengubah prompt ini akan mencabangkan jalan cerita dari titik ini dan meminta AI membalas kembali.
         </p>
         <textarea id="input-edit-content" rows="5" class="w-full px-3 py-2 rounded-xl border outline-none text-sm" style="background-color: var(--bg-surface); border-color: var(--border-color); color: var(--text-main);"></textarea>
       </div>
 
-      <div class="pt-3 border-t flex justify-end gap-2" style="border-color: var(--border-color);">
+      <div class="pt-3 border-t flex justify-end gap-2 font-sans" style="border-color: var(--border-color);">
         <button type="button" class="btn-close-modal px-4 py-2 rounded-xl text-xs font-medium border" style="border-color: var(--border-color);">
           Batal
         </button>
         <button id="btn-save-edited-msg" class="px-5 py-2 rounded-xl text-xs font-semibold shadow-sm" style="background-color: var(--accent); color: #ffffff;">
-          Simpan & Cabangkan Cerita
+          Simpan & Cabangkan
         </button>
       </div>
     </div>
@@ -753,11 +788,12 @@
 
   <!-- 5. BACKUP & RESTORE MODAL -->
   <div id="modal-backup" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm hidden items-center justify-center p-4">
-    <div class="w-full max-w-md rounded-2xl p-5 sm:p-6 shadow-2xl border fade-in" style="background-color: var(--bg-paper); border-color: var(--border-color); color: var(--text-main);">
+    <div class="w-full max-w-md rounded-2xl p-5 sm:p-6 shadow-2xl border fade-enter" style="background-color: var(--bg-paper); border-color: var(--border-color); color: var(--text-main);">
+      
       <div class="flex items-center justify-between pb-3 border-b" style="border-color: var(--border-color);">
         <div class="flex items-center gap-2">
           <i data-lucide="database" class="w-5 h-5" style="color: var(--accent);"></i>
-          <h2 class="font-bold text-base">Manajemen Data & Backup</h2>
+          <h2 class="font-bold text-base font-sans">Manajemen Data & Backup</h2>
         </div>
         <button class="btn-close-modal p-1.5 rounded-lg hover:bg-black/5 dark:hover:bg-white/5">
           <i data-lucide="x" class="w-4 h-4"></i>
@@ -767,8 +803,8 @@
       <div class="py-4 space-y-4 text-sm font-sans">
         <div>
           <label class="block text-xs font-semibold mb-1" style="color: var(--text-muted);">EKSPOR DATA (JSON)</label>
-          <p class="text-xs mb-2" style="color: var(--text-subtle);">Simpan seluruh riwayat sesi, karakter, dan pengaturan ke file lokal.</p>
-          <button id="btn-download-json-backup" class="w-full py-2.5 px-3 rounded-xl border flex items-center justify-center gap-2 font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" style="border-color: var(--border-color);">
+          <p class="text-xs mb-2" style="color: var(--text-subtle);">Simpan seluruh riwayat cerita, karakter, dan pengaturan lokal.</p>
+          <button id="btn-download-json-backup" class="w-full py-2.5 px-3 rounded-xl border flex items-center justify-center gap-2 font-medium hover:bg-black/5 dark:hover:bg-white/5 smooth-transition" style="border-color: var(--border-color);">
             <i data-lucide="download" class="w-4 h-4"></i>
             <span>Unduh File Backup (.json)</span>
           </button>
@@ -776,34 +812,34 @@
 
         <div class="pt-3 border-t" style="border-color: var(--border-color);">
           <label class="block text-xs font-semibold mb-1" style="color: var(--text-muted);">IMPOR DATA (JSON)</label>
-          <p class="text-xs mb-2" style="color: var(--text-subtle);">Pulihkan riwayat cerita dari file cadangan sebelumnya.</p>
+          <p class="text-xs mb-2" style="color: var(--text-subtle);">Pulihkan data cerita dari file backup JSON sebelumnya.</p>
           <input type="file" id="input-import-json" accept=".json" class="hidden">
-          <button id="btn-trigger-import-json" class="w-full py-2.5 px-3 rounded-xl border flex items-center justify-center gap-2 font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" style="border-color: var(--border-color);">
+          <button id="btn-trigger-import-json" class="w-full py-2.5 px-3 rounded-xl border flex items-center justify-center gap-2 font-medium hover:bg-black/5 dark:hover:bg-white/5 smooth-transition" style="border-color: var(--border-color);">
             <i data-lucide="upload" class="w-4 h-4"></i>
-            <span>Pilih File JSON untuk Dipulihkan</span>
+            <span>Pilih File JSON</span>
           </button>
         </div>
 
         <div class="pt-3 border-t" style="border-color: var(--border-color);">
-          <button id="btn-reset-all-data" class="w-full py-2 px-3 rounded-xl text-xs text-rose-600 hover:bg-rose-500/10 font-semibold transition">
-            Hapus Seluruh Data & Reset ke Default
+          <button id="btn-reset-all-data" class="w-full py-2 px-3 rounded-xl text-xs text-rose-600 hover:bg-rose-500/10 font-semibold smooth-transition">
+            Reset Seluruh Data ke Default
           </button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- TOAST NOTIFICATION -->
+  <!-- TOAST NOTIFICATION CONTAINER -->
   <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2 pointer-events-none"></div>
 
-  <!-- ==================== JAVASCRIPT APPLICATION CODE ==================== -->
+  <!-- ==================== JAVASCRIPT ENGINE ==================== -->
   <script>
     /**
      * AI ROLEPLAY & STORY READER ENGINE
-     * Single-file architecture: State, API, Parser, Renderer, & UI Controller
+     * Clean modular architecture for standalone execution
      */
 
-    // --- 1. DEFAULT PRESETS & CONSTANTS ---
+    // --- 1. PRESETS & SCENARIOS ---
     const PRESETS = {
       fantasy: {
         title: "Petualangan Lembah Kabut",
@@ -835,12 +871,12 @@
         aiName: "Camille",
         userName: "Rian",
         system: "Roleplay santai, hangat, dan manis (slice of life romance). Anda memerankan Camille, barista sekaligus pemilik toko buku merangkap cafe kecil di sudut kota Paris. Tulis dengan gaya narasi sastra yang lembut, peka pada emosi, tatapan mata, dan detail suasana hangat.",
-        greeting: "*Aroma biji kopi panggang segar dan wangi kertas buku tua menyambutmu saat lonceng kecil di atas pintu kayu berdering lembut.*\n\n*Camille meletakkan buku sketsanya, menyelipkan sejumput rambut di balik telinganya, lalu tersenyum hangat dari balik mesin espresso kuno berkilau perunggu.*\n\n\"Bonjour! Selamat datang kembali,\" *suaranya renyah seperti kue kering hangat.* \"Hari ini sedikit mendung di luar... Mau kusiapkan cappuccino kayu manis kesukaanmu, atau kau ingin mencoba racikan baru yang baru kubuat pagi ini?\""
+        greeting: "*Aroma biji kopi panggang segar dan wangi kertas buku tua menyambutmu saat lonceng kecil di atas pintu kayu berdering lembut.*\n\n*Camille meletakkan buku sketsanya, menyelipkan sejumput rambut di balik telinganya, lalu tersumpi hangat dari balik mesin espresso kuno berkilau perunggu.*\n\n\"Bonjour! Selamat datang kembali,\" *suaranya renyah seperti kue kering hangat.* \"Hari ini sedikit mendung di luar... Mau kusiapkan cappuccino kayu manis kesukaanmu, atau kau ingin mencoba racikan baru yang baru kubuat pagi ini?\""
       }
     };
 
-    // --- 2. APP STATE ---
-    const STATE_KEY = 'rp_reader_app_state_v1';
+    // --- 2. STATE MANAGEMENT ---
+    const STATE_KEY = 'rp_reader_app_state_v2';
 
     const defaultState = {
       api: {
@@ -882,7 +918,6 @@
         console.error("Gagal membaca LocalStorage:", e);
       }
 
-      // Pastikan minimal ada 1 sesi
       if (!AppState.sessions || AppState.sessions.length === 0) {
         const initialSession = createNewSessionObject(PRESETS.fantasy);
         AppState.sessions = [initialSession];
@@ -898,7 +933,7 @@
       try {
         localStorage.setItem(STATE_KEY, JSON.stringify(AppState));
       } catch (e) {
-        console.error("Gagal menyimpan ke LocalStorage:", e);
+        console.error("Gagal menyimpan LocalStorage:", e);
       }
     }
 
@@ -928,26 +963,24 @@
       return AppState.sessions.find(s => s.id === AppState.activeSessionId) || AppState.sessions[0];
     }
 
-    // --- 3. CUSTOM ROLEPLAY MARKDOWN FORMATTER ---
+    // --- 3. ROLEPLAY FORMATTER ---
     function formatRoleplayText(rawText) {
       if (!rawText) return "";
 
-      // 1. Tangani kutipan dialog agar menonjol: "..." atau “...” atau 「...」
-      // Replace quotes safely with styled span
+      // Format dialog quotes into highlighted span
       let processed = rawText.replace(/("([^"\n\r]+)"|“([^”\n\r]+)”|「([^」\n\r]+)」)/g, (match) => {
-        return `<span class="rp-dialogue font-semibold">${match}</span>`;
+        return `<span class="rp-dialogue">${match}</span>`;
       });
 
-      // 2. Parse menggunakan marked.js
+      // Parse with marked
       if (window.marked && typeof window.marked.parse === 'function') {
         return window.marked.parse(processed, { breaks: true, gfm: true });
       }
 
-      // Fallback jika marked belum termuat
       return processed.replace(/\n/g, '<br>');
     }
 
-    // --- 4. API CLIENT & STREAMING HANDLER ---
+    // --- 4. API STREAMING CLIENT ---
     let currentAbortController = null;
 
     async function fetchAvailableModels(apiUrl, apiKey) {
@@ -980,14 +1013,11 @@
       currentAbortController = new AbortController();
 
       const cleanUrl = AppState.api.url.replace(/\/+$/, '');
-      const headers = {
-        'Content-Type': 'application/json'
-      };
+      const headers = { 'Content-Type': 'application/json' };
       if (AppState.api.key) {
         headers['Authorization'] = `Bearer ${AppState.api.key}`;
       }
 
-      // Bangun payload pesan
       const formattedMessages = [];
       if (systemPrompt) {
         formattedMessages.push({ role: 'system', content: systemPrompt });
@@ -997,7 +1027,7 @@
       });
 
       const payload = {
-        model: AppState.api.model || 'gpt-4o-mini',
+        model: AppState.api.model || 'deepseek-v4-flash',
         messages: formattedMessages,
         temperature: parseFloat(AppState.api.temperature) || 0.85,
         stream: true
@@ -1034,20 +1064,16 @@
           if (done) break;
 
           buffer += decoder.decode(value, { stream: true });
-          
-          // Pisahkan event SSE berdasarkan baris kosong atau newline
           const lines = buffer.split('\n');
-          buffer = lines.pop(); // simpan sisa potongan yang belum lengkap
+          buffer = lines.pop();
 
           for (const line of lines) {
             const trimmed = line.trim();
-            if (!trimmed || trimmed.startsWith(':')) continue; // abaikan komentar/keep-alive
+            if (!trimmed || trimmed.startsWith(':')) continue;
 
             if (trimmed.startsWith('data:')) {
               const dataStr = trimmed.substring(5).trim();
-              if (dataStr === '[DONE]') {
-                continue;
-              }
+              if (dataStr === '[DONE]') continue;
 
               try {
                 const parsed = JSON.parse(dataStr);
@@ -1056,9 +1082,7 @@
                   fullGeneratedText += delta.content;
                   onToken(delta.content, fullGeneratedText);
                 }
-              } catch (e) {
-                // Abaikan kesalahan parsial JSON sementara
-              }
+              } catch (e) {}
             }
           }
         }
@@ -1066,7 +1090,7 @@
         onDone(fullGeneratedText);
       } catch (err) {
         if (err.name === 'AbortError') {
-          console.log("Streaming dihentikan oleh user.");
+          console.log("Streaming stopped by user.");
           onDone();
         } else {
           onError(err);
@@ -1076,7 +1100,7 @@
       }
     }
 
-    // --- 5. UI RENDERER & DOM MANIPULATION ---
+    // --- 5. DOM & RENDERER ---
     const DOM = {
       body: document.body,
       headerStoryTitle: document.getElementById('header-story-title'),
@@ -1100,40 +1124,80 @@
     function applyReaderSettings() {
       const { theme, fontFamily, fontSize, lineHeight, maxWidth } = AppState.reader;
       
-      // Apply theme
+      // 1. Set Theme Attribute
       DOM.body.setAttribute('data-theme', theme);
 
-      // Meta theme-color update
+      // Meta theme-color update for mobile status bars
       const themeColors = {
         sepia: '#f6f1eb',
         midnight: '#12151a',
         oled: '#000000',
-        daylight: '#fafaf9'
+        daylight: '#f8fafc'
       };
       const metaTheme = document.querySelector('meta[name="theme-color"]');
       if (metaTheme) metaTheme.setAttribute('content', themeColors[theme] || '#f6f1eb');
 
-      // Font Family
+      // 2. Set Font Mode Class
       if (fontFamily === 'serif') {
-        DOM.body.classList.remove('font-sans');
-        DOM.body.classList.add('font-serif');
+        DOM.body.classList.remove('font-mode-sans');
+        DOM.body.classList.add('font-mode-serif');
       } else {
-        DOM.body.classList.remove('font-serif');
-        DOM.body.classList.add('font-sans');
+        DOM.body.classList.remove('font-mode-serif');
+        DOM.body.classList.add('font-mode-sans');
       }
 
-      // CSS Variables for font size & line height
+      // 3. Set CSS Variables for instant live response
       document.documentElement.style.setProperty('--story-font-size', `${fontSize}px`);
       document.documentElement.style.setProperty('--story-line-height', lineHeight);
 
-      // Width Container
-      DOM.widthWrapper.className = `w-full ${maxWidth} mx-auto px-4 sm:px-6 md:px-8 py-6 md:py-10 flex-1 flex flex-col justify-between`;
+      // 4. Set Max Reading Width
+      DOM.widthWrapper.className = `w-full ${maxWidth} mx-auto px-4 sm:px-6 md:px-8 py-6 md:py-8 flex-1 flex flex-col justify-between`;
 
-      // Update Controls in Modal if visible
+      // 5. Update Reading Settings Modal UI Elements
       const fontSizeLabel = document.getElementById('font-size-label');
       const fontSizeRange = document.getElementById('range-font-size');
       if (fontSizeLabel) fontSizeLabel.textContent = `${fontSize}px`;
       if (fontSizeRange) fontSizeRange.value = fontSize;
+
+      // Update active state in theme buttons
+      document.querySelectorAll('.theme-choice-btn').forEach(btn => {
+        const isMatch = btn.getAttribute('data-set-theme') === theme;
+        if (isMatch) {
+          btn.classList.add('btn-segmented-active');
+        } else {
+          btn.classList.remove('btn-segmented-active');
+        }
+      });
+
+      // Update active state in font toggle buttons
+      document.querySelectorAll('.font-toggle-btn').forEach(btn => {
+        const isMatch = btn.getAttribute('data-font') === fontFamily;
+        if (isMatch) {
+          btn.classList.add('btn-segmented-active');
+        } else {
+          btn.classList.remove('btn-segmented-active');
+        }
+      });
+
+      // Update active state in line height buttons
+      document.querySelectorAll('.lh-btn').forEach(btn => {
+        const isMatch = btn.getAttribute('data-line-height') === String(lineHeight);
+        if (isMatch) {
+          btn.classList.add('btn-segmented-active');
+        } else {
+          btn.classList.remove('btn-segmented-active');
+        }
+      });
+
+      // Update active state in width buttons
+      document.querySelectorAll('.width-btn').forEach(btn => {
+        const isMatch = btn.getAttribute('data-reader-width') === maxWidth;
+        if (isMatch) {
+          btn.classList.add('btn-segmented-active');
+        } else {
+          btn.classList.remove('btn-segmented-active');
+        }
+      });
     }
 
     function renderSessionsList() {
@@ -1141,7 +1205,7 @@
       AppState.sessions.forEach(session => {
         const isActive = session.id === AppState.activeSessionId;
         const div = document.createElement('div');
-        div.className = `group flex items-center justify-between p-2.5 rounded-xl cursor-pointer transition text-xs select-none ${
+        div.className = `group flex items-center justify-between p-2.5 rounded-xl cursor-pointer smooth-transition text-xs select-none ${
           isActive 
             ? 'font-semibold shadow-sm' 
             : 'hover:bg-black/5 dark:hover:bg-white/5 opacity-80 hover:opacity-100'
@@ -1150,15 +1214,15 @@
         div.style.border = isActive ? '1px solid var(--border-color)' : '1px solid transparent';
 
         div.innerHTML = `
-          <div class="flex items-center gap-2 min-w-0 flex-1">
+          <div class="flex items-center gap-2.5 min-w-0 flex-1">
             <span class="text-base flex-shrink-0">${session.avatar || '📖'}</span>
             <div class="min-w-0 flex-1">
               <div class="truncate font-medium text-inherit">${escapeHtml(session.title)}</div>
-              <div class="text-[10px] truncate opacity-60">${session.messages.length} giliran &bull; ${session.aiName}</div>
+              <div class="text-[10px] truncate opacity-60">${session.messages.length} giliran &bull; ${escapeHtml(session.aiName)}</div>
             </div>
           </div>
           <div class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-            <button class="btn-delete-session p-1 rounded hover:text-rose-500" title="Hapus Sesi" data-id="${session.id}">
+            <button class="btn-delete-session p-1 rounded-lg hover:text-rose-500" title="Hapus Sesi" data-id="${session.id}">
               <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
             </button>
           </div>
@@ -1191,13 +1255,11 @@
       const session = getActiveSession();
       if (!session) return;
 
-      // Update Header
       DOM.headerStoryTitle.textContent = session.title;
       DOM.headerCharSubtitle.textContent = `${session.aiName} (${session.userName})`;
       DOM.headerAvatar.textContent = session.avatar || '🎭';
-      DOM.modelPill.textContent = AppState.api.model || 'Auto';
+      DOM.modelPill.textContent = AppState.api.model || 'deepseek-v4-flash';
 
-      // Render Messages
       DOM.storyContainer.innerHTML = '';
 
       session.messages.forEach((msg, idx) => {
@@ -1212,37 +1274,37 @@
     function createMessageElement(msg, index, session) {
       const isAI = msg.role === 'assistant';
       const wrapper = document.createElement('div');
-      wrapper.className = `story-turn fade-in flex flex-col group relative ${isAI ? 'ai-turn' : 'user-turn'}`;
+      wrapper.className = `story-turn fade-enter flex flex-col group relative ${isAI ? 'ai-turn' : 'user-turn'}`;
       wrapper.setAttribute('data-msg-id', msg.id);
 
       const headerHtml = `
         <div class="flex items-center justify-between mb-1.5 text-xs font-sans opacity-70">
           <div class="flex items-center gap-1.5 font-semibold">
-            <span>${isAI ? (session.avatar + ' ' + session.aiName) : ('👤 ' + session.userName)}</span>
+            <span>${isAI ? (escapeHtml(session.avatar) + ' ' + escapeHtml(session.aiName)) : ('👤 ' + escapeHtml(session.userName))}</span>
           </div>
-          <!-- Action Buttons on Hover -->
+          <!-- Action Buttons -->
           <div class="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1">
             ${!isAI ? `
-              <button class="btn-edit-turn p-1 rounded hover:bg-black/5 dark:hover:bg-white/5" title="Edit Pesan Ini" data-idx="${index}">
+              <button class="btn-edit-turn p-1 rounded-lg hover:bg-black/5 dark:hover:bg-white/5" title="Edit Pesan Ini" data-idx="${index}">
                 <i data-lucide="edit-2" class="w-3.5 h-3.5"></i>
               </button>
             ` : ''}
-            <button class="btn-copy-turn p-1 rounded hover:bg-black/5 dark:hover:bg-white/5" title="Salin Teks" data-idx="${index}">
+            <button class="btn-copy-turn p-1 rounded-lg hover:bg-black/5 dark:hover:bg-white/5" title="Salin Teks" data-idx="${index}">
               <i data-lucide="copy" class="w-3.5 h-3.5"></i>
             </button>
-            <button class="btn-delete-turn p-1 rounded hover:text-rose-500" title="Hapus Giliran" data-idx="${index}">
+            <button class="btn-delete-turn p-1 rounded-lg hover:text-rose-500" title="Hapus Giliran" data-idx="${index}">
               <i data-lucide="trash" class="w-3.5 h-3.5"></i>
             </button>
           </div>
         </div>
       `;
 
-      const bubbleStyle = isAI 
+      const bubbleBg = isAI 
         ? 'background-color: var(--ai-bubble); color: var(--ai-text); border: 1px solid var(--border-color);'
         : 'background-color: var(--user-bubble); color: var(--user-text); border: 1px solid var(--border-color);';
 
       const bodyHtml = `
-        <div class="rounded-2xl p-4 sm:p-5 shadow-sm transition-all story-content" style="${bubbleStyle}">
+        <div class="rounded-2xl p-4 sm:p-5 shadow-sm smooth-transition story-bubble-body" style="${bubbleBg}">
           <div class="formatted-text">${formatRoleplayText(msg.content)}</div>
         </div>
       `;
@@ -1254,7 +1316,7 @@
       if (copyBtn) {
         copyBtn.addEventListener('click', () => {
           navigator.clipboard.writeText(msg.content);
-          showToast("Teks berhasil disalin ke clipboard!");
+          showToast("Teks berhasil disalin!");
         });
       }
 
@@ -1286,13 +1348,13 @@
 
     function escapeHtml(str) {
       if (!str) return '';
-      return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+      return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
 
     function showToast(message, type = 'info') {
       const container = document.getElementById('toast-container');
       const toast = document.createElement('div');
-      toast.className = `p-3 rounded-xl shadow-xl text-xs font-sans flex items-center gap-2 border pointer-events-auto fade-in ${
+      toast.className = `p-3 rounded-xl shadow-2xl text-xs font-sans flex items-center gap-2 border pointer-events-auto fade-enter ${
         type === 'error' ? 'bg-rose-900 text-rose-100 border-rose-700' : 'border-amber-900/20'
       }`;
       toast.style.backgroundColor = type === 'error' ? '' : 'var(--bg-surface)';
@@ -1314,7 +1376,7 @@
       }, 3000);
     }
 
-    // --- 6. STORY ACTIONS & DISPATCHERS ---
+    // --- 6. ACTIONS & EVENT DISPATCHERS ---
 
     async function handleSendMessage(customPrompt = null) {
       const input = DOM.storyInput;
@@ -1325,14 +1387,13 @@
       const session = getActiveSession();
       if (!session) return;
 
-      // Reset input
       if (customPrompt === null) {
         input.value = '';
         input.style.height = 'auto';
         updateCharCounter();
       }
 
-      // 1. Tambah user message
+      // 1. Add user message
       const userMsg = {
         id: 'msg_' + Date.now(),
         role: 'user',
@@ -1343,7 +1404,7 @@
       saveState();
       renderStoryMessages();
 
-      // 2. Siapkan wadah AI turn kosong untuk streaming
+      // 2. Prepare empty AI turn
       const aiMsg = {
         id: 'msg_' + (Date.now() + 1),
         role: 'assistant',
@@ -1352,18 +1413,16 @@
       };
       session.messages.push(aiMsg);
 
-      // Render streaming target element
       const aiTurnEl = createMessageElement(aiMsg, session.messages.length - 1, session);
       DOM.storyContainer.appendChild(aiTurnEl);
       const textContainer = aiTurnEl.querySelector('.formatted-text');
       textContainer.classList.add('typing-cursor');
 
-      // Toggle Send / Stop UI
       setStreamingUIState(true);
 
-      // 3. Panggil API streaming
+      // 3. Stream API
       await streamChatCompletion({
-        messages: session.messages.slice(0, -1), // kirim riwayat sebelum wadah AI kosong
+        messages: session.messages.slice(0, -1),
         systemPrompt: session.system,
         onToken: (token, fullText) => {
           aiMsg.content = fullText;
@@ -1463,16 +1522,12 @@
       const newContent = document.getElementById('input-edit-content').value.trim();
       if (!newContent) return;
 
-      // Update message
       session.messages[editingMessageIndex].content = newContent;
-      
-      // Hapus pesan setelahnya untuk membuat cabang cerita baru
       session.messages = session.messages.slice(0, editingMessageIndex + 1);
       saveState();
       closeModal('modal-edit-msg');
       renderStoryMessages();
 
-      // Trigger kelanjutan AI jika pesan yang diedit adalah giliran user
       if (session.messages[editingMessageIndex].role === 'user') {
         const text = session.messages.pop().content;
         handleSendMessage(text);
@@ -1485,11 +1540,10 @@
 
       const lastMsg = session.messages[session.messages.length - 1];
       if (lastMsg.role === 'assistant') {
-        session.messages.pop(); // Hapus respon AI terakhir
+        session.messages.pop();
         saveState();
         renderStoryMessages();
 
-        // Ambil user prompt sebelumnya dan kirim ulang
         const lastUser = session.messages[session.messages.length - 1];
         if (lastUser && lastUser.role === 'user') {
           const userText = session.messages.pop().content;
@@ -1515,7 +1569,7 @@
       handleSendMessage("[Lanjutkan narasi cerita berikutnya, kembangkan suasana dan tindakan karakter sesuai alur...]");
     }
 
-    // --- 7. EXPORT & BACKUP UTILITIES ---
+    // --- 7. EXPORT & BACKUP ---
 
     function exportStoryToMarkdown() {
       const session = getActiveSession();
@@ -1580,7 +1634,7 @@
       reader.readAsText(file);
     }
 
-    // --- 8. MODAL & DRAWER HELPERS ---
+    // --- 8. MODAL & UI CONTROLLERS ---
 
     function openModal(modalId) {
       const el = document.getElementById(modalId);
@@ -1621,17 +1675,17 @@
       DOM.charCounter.textContent = `${len} karakter`;
     }
 
-    // --- 9. EVENT LISTENERS & INITIALIZATION ---
+    // --- 9. EVENT LISTENERS INITIALIZATION ---
 
     function initEventListeners() {
-      // Auto-grow Textarea
+      // Auto-grow textarea
       DOM.storyInput.addEventListener('input', () => {
         DOM.storyInput.style.height = 'auto';
-        DOM.storyInput.style.height = Math.min(DOM.storyInput.scrollHeight, 180) + 'px';
+        DOM.storyInput.style.height = Math.min(DOM.storyInput.scrollHeight, 160) + 'px';
         updateCharCounter();
       });
 
-      // Submit on Enter (Shift+Enter for newline)
+      // Enter to send
       DOM.storyInput.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' && !e.shiftKey) {
           e.preventDefault();
@@ -1639,12 +1693,13 @@
         }
       });
 
-      // Buttons
+      // Send & Stop
       DOM.btnSend.addEventListener('click', () => handleSendMessage());
       DOM.btnStop.addEventListener('click', () => {
         if (currentAbortController) currentAbortController.abort();
       });
 
+      // Sidebar toggles
       DOM.btnToggleSidebar.addEventListener('click', toggleSidebar);
       DOM.btnCloseSidebar.addEventListener('click', closeSidebar);
       DOM.sidebarBackdrop.addEventListener('click', closeSidebar);
@@ -1654,13 +1709,13 @@
         if (window.innerWidth < 768) closeSidebar();
       });
 
-      // Quick Actions
+      // Quick Action Buttons
       document.getElementById('btn-quick-continue').addEventListener('click', continueStoryPrompt);
       document.getElementById('btn-quick-regen').addEventListener('click', regenerateLastTurn);
       document.getElementById('btn-quick-undo').addEventListener('click', undoLastTurn);
       document.getElementById('btn-scroll-bottom').addEventListener('click', () => scrollToBottom());
 
-      // Theme Cycle Header Button
+      // Quick Theme Cycle
       const themesList = ['sepia', 'midnight', 'oled', 'daylight'];
       document.getElementById('btn-theme-cycle').addEventListener('click', () => {
         const currentIdx = themesList.indexOf(AppState.reader.theme);
@@ -1672,9 +1727,12 @@
       });
 
       // Open Modals
-      document.getElementById('btn-open-reader-settings').addEventListener('click', () => openModal('modal-reader-settings'));
+      document.getElementById('btn-open-reader-settings').addEventListener('click', () => {
+        applyReaderSettings();
+        openModal('modal-reader-settings');
+      });
+
       document.getElementById('btn-open-settings').addEventListener('click', () => {
-        // Hydrate API fields
         document.getElementById('input-api-url').value = AppState.api.url;
         document.getElementById('input-api-key').value = AppState.api.key;
         document.getElementById('input-temperature').value = AppState.api.temperature;
@@ -1695,7 +1753,7 @@
       document.getElementById('btn-export-story').addEventListener('click', exportStoryToMarkdown);
       document.getElementById('btn-backup-data').addEventListener('click', () => openModal('modal-backup'));
 
-      // Close Modals buttons
+      // Close modal buttons
       document.querySelectorAll('.btn-close-modal').forEach(btn => {
         btn.addEventListener('click', () => {
           btn.closest('.fixed').classList.add('hidden');
@@ -1703,16 +1761,15 @@
         });
       });
 
-      // Immersive Mode
+      // Immersive Focus Mode
       document.getElementById('btn-enter-immersive').addEventListener('click', () => {
         DOM.body.classList.add('immersive-mode');
-        showToast("Mode Immersive Aktif. Tekan [Esc] untuk kembali.", "info");
+        showToast("Mode Fokus Aktif. Tekan [Esc] untuk kembali.", "info");
       });
       document.getElementById('immersive-exit-btn').addEventListener('click', () => {
         DOM.body.classList.remove('immersive-mode');
       });
 
-      // Global Keydown (Esc to exit immersive or close modals)
       window.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
           if (DOM.body.classList.contains('immersive-mode')) {
@@ -1728,7 +1785,7 @@
         }
       });
 
-      // Reader Appearance Controls in Modal
+      // Reading Appearance Live Controls
       document.querySelectorAll('.theme-choice-btn').forEach(btn => {
         btn.addEventListener('click', () => {
           const theme = btn.getAttribute('data-set-theme');
@@ -1738,15 +1795,13 @@
         });
       });
 
-      document.getElementById('font-choice-serif').addEventListener('click', () => {
-        AppState.reader.fontFamily = 'serif';
-        saveState();
-        applyReaderSettings();
-      });
-      document.getElementById('font-choice-sans').addEventListener('click', () => {
-        AppState.reader.fontFamily = 'sans';
-        saveState();
-        applyReaderSettings();
+      document.querySelectorAll('.font-toggle-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const f = btn.getAttribute('data-font');
+          AppState.reader.fontFamily = f;
+          saveState();
+          applyReaderSettings();
+        });
       });
 
       const rangeSize = document.getElementById('range-font-size');
@@ -1754,6 +1809,22 @@
         AppState.reader.fontSize = parseInt(e.target.value);
         saveState();
         applyReaderSettings();
+      });
+
+      document.getElementById('btn-font-dec').addEventListener('click', () => {
+        if (AppState.reader.fontSize > 14) {
+          AppState.reader.fontSize -= 1;
+          saveState();
+          applyReaderSettings();
+        }
+      });
+
+      document.getElementById('btn-font-inc').addEventListener('click', () => {
+        if (AppState.reader.fontSize < 24) {
+          AppState.reader.fontSize += 1;
+          saveState();
+          applyReaderSettings();
+        }
       });
 
       document.querySelectorAll('.lh-btn').forEach(btn => {
@@ -1772,7 +1843,7 @@
         });
       });
 
-      // API Settings Form Submit
+      // API Settings Form
       document.getElementById('form-api-settings').addEventListener('submit', (e) => {
         e.preventDefault();
         AppState.api.url = document.getElementById('input-api-url').value.trim();
@@ -1782,7 +1853,7 @@
         saveState();
         closeModal('modal-settings');
         DOM.modelPill.textContent = AppState.api.model;
-        showToast("Konfigurasi API berhasil disimpan!");
+        showToast("Pengaturan API berhasil disimpan!");
       });
 
       document.getElementById('input-temperature').addEventListener('input', (e) => {
@@ -1810,7 +1881,7 @@
         input.type = input.type === 'password' ? 'text' : 'password';
       });
 
-      // Persona Modal & Presets
+      // Persona Presets
       document.querySelectorAll('.preset-card-btn').forEach(btn => {
         btn.addEventListener('click', () => {
           const presetKey = btn.getAttribute('data-preset');
@@ -1837,7 +1908,6 @@
         session.userName = document.getElementById('input-persona-user-name').value.trim();
         session.system = document.getElementById('input-persona-system').value.trim();
         
-        // Periksa greeting
         const greetingText = document.getElementById('input-persona-greeting').value.trim();
         if (session.messages.length <= 1 && greetingText) {
           session.messages[0].content = greetingText;
@@ -1847,13 +1917,13 @@
         closeModal('modal-persona-hub');
         renderSessionsList();
         renderStoryMessages();
-        showToast("Persona & skenario berhasil diperbarui!");
+        showToast("Skenario berhasil diperbarui!");
       });
 
       // Edit Message Submit
       document.getElementById('btn-save-edited-msg').addEventListener('click', saveEditedMessage);
 
-      // Backup & Import
+      // Backup & Restore
       document.getElementById('btn-download-json-backup').addEventListener('click', downloadJsonBackup);
       document.getElementById('btn-trigger-import-json').addEventListener('click', () => {
         document.getElementById('input-import-json').click();
@@ -1903,7 +1973,7 @@
       });
     }
 
-    // --- 10. APP BOOTSTRAP ---
+    // --- 10. APP INITIALIZATION ---
     window.addEventListener('DOMContentLoaded', async () => {
       loadState();
       applyReaderSettings();
@@ -1911,7 +1981,6 @@
       renderStoryMessages();
       initEventListeners();
 
-      // Background attempt to populate live models if key exists
       try {
         await populateModelDropdown();
       } catch (_) {}
